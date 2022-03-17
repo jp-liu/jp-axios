@@ -1,8 +1,9 @@
-import { describe, expect, it } from 'vitest'
-import { one } from '../src'
+// import { describe, expect, it } from 'vitest'
+// import { JPAxios } from '../src'
 
-describe('should', () => {
-  it('exported', () => {
-    expect(one).toEqual(1)
-  })
-})
+// describe('jp-axios', () => {
+// it('happy path, use jp-axios', () => {
+//   const instance1 = new JPAxios()
+//   expect().toBe(true)
+// })
+// })
