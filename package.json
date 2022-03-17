@@ -1,20 +1,19 @@
 {
-  "name": "name",
+  "name": "@jpliu/jp-axios",
   "version": "0.0.0",
   "packageManager": "pnpm@6.32.3",
   "description": "",
   "keywords": [],
-  "homepage": "https://github.com/antfu/[name]#readme",
+  "homepage": "https://github.com/jp-liu/jp-axios#readme",
   "bugs": {
-    "url": "https://github.com/antfu/[name]/issues"
+    "url": "https://github.com/jp-liu/jp-axios/issues"
   },
   "license": "MIT",
-  "author": "Anthony Fu <anthonyfu117@hotmail.com>",
+  "author": "jp-liu <fortune_coder@foxmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/antfu/[name].git"
+    "url": "git@github.com:jp-liu/jp-axios.git"
   },
-  "funding": "https://github.com/sponsors/antfu",
   "sideEffects": false,
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",

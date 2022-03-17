@@ -1,19 +1,34 @@
-# [name]
+# jp-axios
 
-[![NPM version](https://img.shields.io/npm/v/[name]?color=a1b858&label=)](https://www.npmjs.com/package/[name])
+**jp-axios** 是 `axios` 的封装版本.它提供了一下功能
 
-## Sponsors
+1. 支持模块分模块使用
+2. 支持 `hooks` 的方式使用
+3. 提供对应信息生成 `ts` 对应接口,利于日常开发联调
 
-<p align="center">
-  <a href="https://cdn.jsdelivr.net/gh/antfu/static/sponsors.svg">
-    <img src='https://cdn.jsdelivr.net/gh/antfu/static/sponsors.svg'/>
-  </a>
-</p>
 
-```ts
-const a = 1
+
+## 下载
+
+```bash
+# with npm
+$ npm install jp-axios
+
+# or with yarn
+$ yarn add jp-axios
+
+# or with pnpm
+$ pnpm add jp-axios
 ```
+
+
+
+## 使用
+
+TODO
+
+
 
 ## License
 
-[MIT](./LICENSE) License © 2021 [Anthony Fu](https://github.com/antfu)
+[MIT](./LICENSE) License © 2022 [jp-liu](https://github.com/jp-liu)
