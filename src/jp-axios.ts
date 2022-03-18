@@ -24,6 +24,9 @@ export class JPAxios {
   constructor(config: JPRequestConfig) {
     this.instance = axios.create(config)
     this.interceptors = config.interceptors
+
+    // 定义的组件实例拦截器
+    this.interceptors && this.use(this.interceptors)
   }
 
   request<T>(config: JPRequestConfig<T>): Promise<T> {
@@ -74,6 +77,33 @@ export class JPAxios {
 
   put<T>(config: JPRequestConfig<T>): Promise<T> {
     return this.request({ ...config, method: 'PUT' })
+  }
+
+  use(interceptors: JPInterceptors) {
+    /**
+     * Tips: 拦截器执行结构
+     *    - Q:请求  S: 响应  F: 服务器
+     *    - 如果对顺序要求,可以通过设置对应的拦截顺序进行修改,机制如下
+     *    - Q1/S1 拦截器1
+     *    - Q2/S2 拦截器2
+     *    - Q3/S3 拦截器3
+     *
+     *         F         F  服务器响应
+     *    Q1   ↑    S1   ↓
+     *    Q2   ↑    S2   ↓
+     *    Q3   ↑    S3   ↓
+     * 浏览器发送
+     */
+    // 实例请求拦截器
+    this.instance.interceptors.request.use(
+      interceptors?.requestInterceptor,
+      interceptors?.requestInterceptorCatch
+    )
+    // 实例响应拦截器
+    this.instance.interceptors.response.use(
+      interceptors?.responseInterceptor,
+      interceptors?.responseInterceptorCatch
+    )
   }
 }
 
