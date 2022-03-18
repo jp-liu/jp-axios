@@ -1,27 +1,32 @@
 import axios from 'axios'
-
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
-interface JPRequestConfig extends AxiosRequestConfig {
-  interceptors: JPInterceptors
+/**
+ * @description 扩展 `AxiosRequestConfig`, 使用时可以传递专属拦截器
+ */
+export interface JPRequestConfig<T = AxiosResponse> extends AxiosRequestConfig {
+  interceptors?: JPInterceptors<T>
 }
 
-export interface JPInterceptors {
-  requestInterceptor?: (config: JPRequestConfig) => JPRequestConfig
+/**
+ * @description 封装拦截器接口
+ */
+export interface JPInterceptors<T = AxiosResponse> {
+  requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig
   requestInterceptorCatch?: (err: any) => any
-  responseInterceptor?: <T = AxiosResponse>(res: T) => T
+  responseInterceptor?: (res: T) => T
   responseInterceptorCatch?: (err: any) => any
 }
 
 export class JPAxios {
   instance: AxiosInstance
-  interceptors: JPInterceptors | undefined
-  constructor(config?: JPRequestConfig) {
+  interceptors?: JPInterceptors
+  constructor(config: JPRequestConfig) {
     this.instance = axios.create(config)
-    this.interceptors = config?.interceptors
+    this.interceptors = config.interceptors
   }
 
-  request<T>(config: JPRequestConfig): Promise<T> {
+  request<T>(config: JPRequestConfig<T>): Promise<T> {
     return new Promise((resolve, reject) => {
       // 定义请求拦截器
       if (config.interceptors?.requestInterceptor)
@@ -31,29 +36,44 @@ export class JPAxios {
       this.instance
         .request<any, T>(config)
         .then((res) => {
+          // 定义接口响应拦截器
+          if (config.interceptors?.responseInterceptor)
+            res = config.interceptors?.responseInterceptor(res)
+
           resolve(res)
         })
         .catch((err) => {
           reject(err)
         })
-        .finally(() => {})
     })
   }
 
-  get<T>(config: JPRequestConfig): Promise<T> {
+  get<T>(config: JPRequestConfig<T>): Promise<T> {
     return this.request({ ...config, method: 'GET' })
   }
 
-  post<T>(config: JPRequestConfig): Promise<T> {
+  post<T>(config: JPRequestConfig<T>): Promise<T> {
     return this.request({ ...config, method: 'POST' })
   }
 
-  delete<T>(config: JPRequestConfig): Promise<T> {
+  delete<T>(config: JPRequestConfig<T>): Promise<T> {
     return this.request({ ...config, method: 'DELETE' })
   }
 
-  patch<T>(config: JPRequestConfig): Promise<T> {
+  patch<T>(config: JPRequestConfig<T>): Promise<T> {
     return this.request({ ...config, method: 'PATCH' })
+  }
+
+  head<T>(config: JPRequestConfig<T>): Promise<T> {
+    return this.request({ ...config, method: 'HEAD' })
+  }
+
+  options<T>(config: JPRequestConfig<T>): Promise<T> {
+    return this.request({ ...config, method: 'OPTIONS' })
+  }
+
+  put<T>(config: JPRequestConfig<T>): Promise<T> {
+    return this.request({ ...config, method: 'PUT' })
   }
 }
 
