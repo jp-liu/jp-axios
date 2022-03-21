@@ -21,15 +21,15 @@ export interface JPInterceptors<T = AxiosResponse> {
 export class JPAxios {
   instance: AxiosInstance
   interceptors?: JPInterceptors
-  constructor(config: JPRequestConfig) {
+  constructor(config?: JPRequestConfig) {
     this.instance = axios.create(config)
-    this.interceptors = config.interceptors
+    this.interceptors = config?.interceptors
 
     // 定义的组件实例拦截器
     this.interceptors && this.use(this.interceptors)
   }
 
-  request<T>(config: JPRequestConfig<T>): Promise<T> {
+  request<T = AxiosResponse>(config: JPRequestConfig<T>): Promise<T> {
     return new Promise((resolve, reject) => {
       // 定义请求拦截器
       if (config.interceptors?.requestInterceptor)
@@ -51,31 +51,31 @@ export class JPAxios {
     })
   }
 
-  get<T>(config: JPRequestConfig<T>): Promise<T> {
+  get<T = AxiosResponse>(config: JPRequestConfig<T>): Promise<T> {
     return this.request({ ...config, method: 'GET' })
   }
 
-  post<T>(config: JPRequestConfig<T>): Promise<T> {
+  post<T = AxiosResponse>(config: JPRequestConfig<T>): Promise<T> {
     return this.request({ ...config, method: 'POST' })
   }
 
-  delete<T>(config: JPRequestConfig<T>): Promise<T> {
+  delete<T = AxiosResponse>(config: JPRequestConfig<T>): Promise<T> {
     return this.request({ ...config, method: 'DELETE' })
   }
 
-  patch<T>(config: JPRequestConfig<T>): Promise<T> {
+  patch<T = AxiosResponse>(config: JPRequestConfig<T>): Promise<T> {
     return this.request({ ...config, method: 'PATCH' })
   }
 
-  head<T>(config: JPRequestConfig<T>): Promise<T> {
+  head<T = AxiosResponse>(config: JPRequestConfig<T>): Promise<T> {
     return this.request({ ...config, method: 'HEAD' })
   }
 
-  options<T>(config: JPRequestConfig<T>): Promise<T> {
+  options<T = AxiosResponse>(config: JPRequestConfig<T>): Promise<T> {
     return this.request({ ...config, method: 'OPTIONS' })
   }
 
-  put<T>(config: JPRequestConfig<T>): Promise<T> {
+  put<T = AxiosResponse>(config: JPRequestConfig<T>): Promise<T> {
     return this.request({ ...config, method: 'PUT' })
   }
 
