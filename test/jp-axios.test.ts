@@ -93,4 +93,49 @@ describe('jp-axios', () => {
       height: 1.88
     })
   })
+
+  test('interface interceptor', async() => {
+    const requestArr: string[] = []
+    const responseArr: string[] = []
+    const instance = new JPAxios()
+    instance.use({
+      requestInterceptor(config) {
+        requestArr.push('first request')
+        return config
+      },
+      responseInterceptor(res) {
+        responseArr.push('first response')
+        return res.data
+      }
+    })
+
+    const res = await instance.get<{ name: string;age: number;height: number; job?: string }>({
+      url: 'http://localhost:3000/user/info',
+      interceptors: {
+        requestInterceptor(config) {
+          requestArr.push('second request')
+          return config
+        },
+        responseInterceptor(res) {
+          responseArr.push('second response')
+          if (res.name === '小明')
+            res.job = 'xdm'
+
+          return res
+        }
+      }
+    })
+    expect(requestArr).toMatchObject(['second request', 'first request'])
+    expect(responseArr).toMatchObject(['first response', 'second response'])
+    expect(res).toMatchObject({
+      name: '小明',
+      age: 18,
+      height: 1.88,
+      job: 'xdm'
+    })
+  })
+
+  // test('support hook usage', async() => {
+  //   const res = await useHttp({ url: 'http://localhost:3000/user/info', method: 'get' })
+  // })
 })
