@@ -29,6 +29,20 @@ router.post('user', '/user/post', async(ctx) => {
   ctx.body = false
 })
 
+router.post('goods', '/goods/info', async(ctx) => {
+  const id = ctx.request.body?.id
+  setTimeout(() => {
+    if (id === '123321') {
+      ctx.body = {
+        id: 'easp1212421',
+        title: '大棉袄',
+        price: 123.11,
+        category: ['123', '321', '456'],
+      }
+    }
+  }, 2000)
+})
+
 app.use(bodyparser())
 app.use(router.routes())
 
