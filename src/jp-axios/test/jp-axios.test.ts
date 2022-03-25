@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import JPAxios from '../src'
+import JPAxios from '..'
 
 describe('jp-axios', () => {
   test('happy path, use jp-axios', async() => {

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { useHttp } from '../src'
+import { useHttp } from '..'
 
 describe('jp-axios hooks api', () => {
   test('happy path, useHttp', async() => {

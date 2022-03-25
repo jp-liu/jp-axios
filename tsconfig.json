@@ -9,6 +9,6 @@
     "strictNullChecks": true,
     "resolveJsonModule": true,
     "skipDefaultLibCheck": true,
-    "types": ["axios"]
+    "types": ["axios", "node"]
   }
 }

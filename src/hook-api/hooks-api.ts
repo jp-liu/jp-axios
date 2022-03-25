@@ -1,7 +1,7 @@
 
 import type { AxiosInstance, AxiosResponse } from 'axios'
-import type { JPInterceptors, JPRequestConfig } from './jp-axios'
-import { JPAxios } from './jp-axios'
+import { JPAxios } from '../jp-axios/jp-axios'
+import type { JPInterceptors, JPRequestConfig } from '../jp-axios/jp-axios'
 
 type Method = JPRequestConfig['method']
 
