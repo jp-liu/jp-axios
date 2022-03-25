@@ -7,6 +7,7 @@ type Method = JPRequestConfig['method']
 
 interface UseHttp {
   <T = AxiosResponse>(config: JPRequestConfig<T>): Promise<T>
+  <T = AxiosResponse>(url: string): Promise<T>
   <T = AxiosResponse>(url: string, config?: Omit<JPRequestConfig, 'url'>): Promise<T>
   <T = AxiosResponse>(url: string, method: Method, config?: Omit<JPRequestConfig, 'url'| 'method'>): Promise<T>
   instance: AxiosInstance
@@ -29,6 +30,9 @@ export const useHttp: UseHttp = function us<T>(
 ): Promise<T> {
   const len = arguments.length
   if (len === 1) {
+    if (typeof urlOrConfig === 'string')
+      return jpAxiosInstance.request({ url: urlOrConfig })
+
     return jpAxiosInstance.request<T>(urlOrConfig)
   }
   else if (len === 2) {
