@@ -23,7 +23,7 @@ export interface JPInterceptors<T = AxiosResponse, K = AxiosResponse> {
  */
 export type Interceptor<T, K extends boolean = false> = K extends true ? AxiosResponse<T> : T
 
-export class JPAxios<T> {
+export class JPAxios<T = AxiosResponse> {
   instance: AxiosInstance
   interceptors?: JPInterceptors<AxiosResponse<T>, T>
   constructor(config?: JPRequestConfig<AxiosResponse<T>, T>) {
