@@ -1,5 +1,5 @@
 
-import type { AxiosInstance, AxiosResponse } from 'axios'
+import type { AxiosDefaults, AxiosInstance, AxiosResponse } from 'axios'
 import { JPAxios } from '../jp-axios/jp-axios'
 import type { Interceptor, JPRequestConfig } from '../jp-axios/jp-axios'
 
@@ -11,6 +11,8 @@ interface UseHttp {
   <T = AxiosResponse, K extends boolean = false>(url: string, config?: Omit<JPRequestConfig<Interceptor<T, K>, T>, 'url'>): Promise<T>
   <T = AxiosResponse, K extends boolean = false>(url: string, method: Method, config?: Omit<JPRequestConfig<Interceptor<T, K>, T>, 'url'| 'method'>): Promise<T>
   instance: AxiosInstance
+  defaults: AxiosDefaults
+  request: typeof jpAxiosInstance.request
   get: typeof jpAxiosInstance.get
   post: typeof jpAxiosInstance.post
   put: typeof jpAxiosInstance.put
@@ -51,6 +53,8 @@ export const useHttp: UseHttp = function useHttp<T>(
 }
 
 useHttp.instance = jpAxiosInstance.instance
+useHttp.defaults = jpAxiosInstance.instance.defaults
+useHttp.request = jpAxiosInstance.request.bind(jpAxiosInstance)
 useHttp.get = jpAxiosInstance.get.bind(jpAxiosInstance)
 useHttp.post = jpAxiosInstance.post.bind(jpAxiosInstance)
 useHttp.put = jpAxiosInstance.put.bind(jpAxiosInstance)
