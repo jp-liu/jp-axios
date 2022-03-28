@@ -8,14 +8,14 @@ describe('jp-axios', () => {
     expect(res.data).toMatchObject({
       name: '小明',
       age: 18,
-      height: 1.88
+      height: 1.88,
     })
 
     const res1 = await instance.post({
       url: 'http://localhost:3000/user/post',
       data: {
-        id: '123321'
-      }
+        id: '123321',
+      },
     })
 
     expect(res1.data).toBe(true)
@@ -24,7 +24,7 @@ describe('jp-axios', () => {
   test('instance interceptor', async() => {
     let dummy = 0
     let response = 0
-    const instance = new JPAxios({
+    const instance = new JPAxios<{ id: 123 }>({
       interceptors: {
         requestInterceptor(config) {
           dummy++
@@ -33,8 +33,8 @@ describe('jp-axios', () => {
         responseInterceptor(res) {
           response++
           return res.data
-        }
-      }
+        },
+      },
     })
     const res = await instance.get({ url: 'http://localhost:3000/user/info' })
     expect(dummy).toBe(1)
@@ -42,14 +42,14 @@ describe('jp-axios', () => {
     expect(res).toMatchObject({
       name: '小明',
       age: 18,
-      height: 1.88
+      height: 1.88,
     })
     const res1 = await instance.get({ url: 'http://localhost:3000/user/info' })
     expect(dummy).toBe(2)
     expect(res1).toMatchObject({
       name: '小明',
       age: 18,
-      height: 1.88
+      height: 1.88,
     })
   })
 
@@ -63,7 +63,7 @@ describe('jp-axios', () => {
      *  请求: 自下而上
      *  响应: 自上而下
      */
-    instance.use({
+    instance.use<{ id: 123 }, true>({
       requestInterceptor(config) {
         requestArr.push('first request')
         return config
@@ -71,10 +71,10 @@ describe('jp-axios', () => {
       responseInterceptor(res) {
         responseArr.push('first response')
         return res.data
-      }
+      },
     })
 
-    instance.use({
+    instance.use<{ name: '13321' }>({
       requestInterceptor(config) {
         requestArr.push('second request')
         return config
@@ -82,7 +82,7 @@ describe('jp-axios', () => {
       responseInterceptor(res) {
         responseArr.push('second response')
         return res
-      }
+      },
     })
     const res = await instance.get({ url: 'http://localhost:3000/user/info' })
     expect(requestArr).toMatchObject(['second request', 'first request'])
@@ -90,7 +90,7 @@ describe('jp-axios', () => {
     expect(res).toMatchObject({
       name: '小明',
       age: 18,
-      height: 1.88
+      height: 1.88,
     })
   })
 
@@ -106,10 +106,15 @@ describe('jp-axios', () => {
       responseInterceptor(res) {
         responseArr.push('first response')
         return res.data
-      }
+      },
     })
 
-    const res = await instance.get<{ name: string;age: number;height: number; job?: string }>({
+    const res = await instance.get<{
+      name: string
+      age: number
+      height: number
+      job?: string
+    }>({
       url: 'http://localhost:3000/user/info',
       interceptors: {
         requestInterceptor(config) {
@@ -118,12 +123,11 @@ describe('jp-axios', () => {
         },
         responseInterceptor(res) {
           responseArr.push('second response')
-          if (res.name === '小明')
-            res.job = 'xdm'
+          if (res.name === '小明') res.job = 'xdm'
 
           return res
-        }
-      }
+        },
+      },
     })
     expect(requestArr).toMatchObject(['second request', 'first request'])
     expect(responseArr).toMatchObject(['first response', 'second response'])
@@ -131,7 +135,7 @@ describe('jp-axios', () => {
       name: '小明',
       age: 18,
       height: 1.88,
-      job: 'xdm'
+      job: 'xdm',
     })
   })
 

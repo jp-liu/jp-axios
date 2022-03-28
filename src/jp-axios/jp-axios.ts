@@ -4,32 +4,37 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 /**
  * @description 扩展 `AxiosRequestConfig`, 使用时可以传递专属拦截器
  */
-export interface JPRequestConfig<T = AxiosResponse> extends AxiosRequestConfig {
-  interceptors?: JPInterceptors<T>
+export interface JPRequestConfig<T = AxiosResponse, K = AxiosResponse> extends AxiosRequestConfig {
+  interceptors?: JPInterceptors<T, K>
 }
 
 /**
  * @description 封装拦截器接口
  */
-export interface JPInterceptors<T = AxiosResponse> {
+export interface JPInterceptors<T = AxiosResponse, K = AxiosResponse> {
   requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig
   requestInterceptorCatch?: (err: any) => any
-  responseInterceptor?: (res: T) => T
+  responseInterceptor?: (res: T) => K
   responseInterceptorCatch?: (err: any) => any
 }
 
-export class JPAxios {
+/**
+ * @description 判断拦截器的入参和出参
+ */
+type Interceptor<T, K extends boolean = false> = JPInterceptors<K extends true ? AxiosResponse<T> : T, T>
+
+export class JPAxios<T> {
   instance: AxiosInstance
-  interceptors?: JPInterceptors
-  constructor(config?: JPRequestConfig) {
+  interceptors?: JPInterceptors<AxiosResponse<T>, T>
+  constructor(config?: JPRequestConfig<AxiosResponse<T>, T>) {
     this.instance = axios.create(config)
     this.interceptors = config?.interceptors
 
     // 定义的组件实例拦截器
-    this.interceptors && this.use(this.interceptors)
+    this.interceptors && this.use(this.interceptors as any)
   }
 
-  request<T = AxiosResponse>(config: JPRequestConfig<T>): Promise<T> {
+  request<T = AxiosResponse>(config: JPRequestConfig<T, T>): Promise<T> {
     return new Promise((resolve, reject) => {
       // 定义请求拦截器
       if (config.interceptors?.requestInterceptor)
@@ -51,35 +56,35 @@ export class JPAxios {
     })
   }
 
-  get<T = AxiosResponse>(config: JPRequestConfig<T>): Promise<T> {
+  get<T = AxiosResponse>(config: JPRequestConfig<T, T>): Promise<T> {
     return this.request({ ...config, method: 'GET' })
   }
 
-  post<T = AxiosResponse>(config: JPRequestConfig<T>): Promise<T> {
+  post<T = AxiosResponse>(config: JPRequestConfig<T, T>): Promise<T> {
     return this.request({ ...config, method: 'POST' })
   }
 
-  delete<T = AxiosResponse>(config: JPRequestConfig<T>): Promise<T> {
+  delete<T = AxiosResponse>(config: JPRequestConfig<T, T>): Promise<T> {
     return this.request({ ...config, method: 'DELETE' })
   }
 
-  patch<T = AxiosResponse>(config: JPRequestConfig<T>): Promise<T> {
+  patch<T = AxiosResponse>(config: JPRequestConfig<T, T>): Promise<T> {
     return this.request({ ...config, method: 'PATCH' })
   }
 
-  head<T = AxiosResponse>(config: JPRequestConfig<T>): Promise<T> {
+  head<T = AxiosResponse>(config: JPRequestConfig<T, T>): Promise<T> {
     return this.request({ ...config, method: 'HEAD' })
   }
 
-  options<T = AxiosResponse>(config: JPRequestConfig<T>): Promise<T> {
+  options<T = AxiosResponse>(config: JPRequestConfig<T, T>): Promise<T> {
     return this.request({ ...config, method: 'OPTIONS' })
   }
 
-  put<T = AxiosResponse>(config: JPRequestConfig<T>): Promise<T> {
+  put<T = AxiosResponse>(config: JPRequestConfig<T, T>): Promise<T> {
     return this.request({ ...config, method: 'PUT' })
   }
 
-  use(interceptors: JPInterceptors) {
+  use<T = AxiosResponse, K extends boolean = false>(interceptors: Interceptor<T, K>) {
     /**
      * Tips: 拦截器执行结构
      *    - Q:请求  S: 响应  F: 服务器
@@ -101,7 +106,7 @@ export class JPAxios {
     )
     // 实例响应拦截器
     this.instance.interceptors.response.use(
-      interceptors?.responseInterceptor,
+      interceptors?.responseInterceptor as any,
       interceptors?.responseInterceptorCatch
     )
   }
