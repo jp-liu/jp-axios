@@ -1,15 +1,15 @@
 
 import type { AxiosInstance, AxiosResponse } from 'axios'
 import { JPAxios } from '../jp-axios/jp-axios'
-import type { JPRequestConfig } from '../jp-axios/jp-axios'
+import type { Interceptor, JPRequestConfig } from '../jp-axios/jp-axios'
 
 type Method = JPRequestConfig['method']
 
 interface UseHttp {
-  <T = AxiosResponse>(config: JPRequestConfig<T>): Promise<T>
   <T = AxiosResponse>(url: string): Promise<T>
-  <T = AxiosResponse>(url: string, config?: Omit<JPRequestConfig, 'url'>): Promise<T>
-  <T = AxiosResponse>(url: string, method: Method, config?: Omit<JPRequestConfig, 'url'| 'method'>): Promise<T>
+  <T = AxiosResponse, K extends boolean = false>(config: JPRequestConfig<Interceptor<T, K>, T>): Promise<T>
+  <T = AxiosResponse, K extends boolean = false>(url: string, config?: Omit<JPRequestConfig<Interceptor<T, K>, T>, 'url'>): Promise<T>
+  <T = AxiosResponse, K extends boolean = false>(url: string, method: Method, config?: Omit<JPRequestConfig<Interceptor<T, K>, T>, 'url'| 'method'>): Promise<T>
   instance: AxiosInstance
   get: typeof jpAxiosInstance.get
   post: typeof jpAxiosInstance.post

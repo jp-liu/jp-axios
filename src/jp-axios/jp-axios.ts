@@ -21,7 +21,7 @@ export interface JPInterceptors<T = AxiosResponse, K = AxiosResponse> {
 /**
  * @description 判断拦截器的入参和出参
  */
-type Interceptor<T, K extends boolean = false> = JPInterceptors<K extends true ? AxiosResponse<T> : T, T>
+export type Interceptor<T, K extends boolean = false> = K extends true ? AxiosResponse<T> : T
 
 export class JPAxios<T> {
   instance: AxiosInstance
@@ -84,7 +84,7 @@ export class JPAxios<T> {
     return this.request({ ...config, method: 'PUT' })
   }
 
-  use<T = AxiosResponse, K extends boolean = false>(interceptors: Interceptor<T, K>) {
+  use<T = AxiosResponse, K extends boolean = false>(interceptors: JPInterceptors<Interceptor<T, K>, T>) {
     /**
      * Tips: 拦截器执行结构
      *    - Q:请求  S: 响应  F: 服务器
