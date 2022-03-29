@@ -1,100 +1,61 @@
 <%
-const { apiConfig, generateResponses, routes, config } = it;
-console.log(routes.combined[0].moduleName);
-const moduleName = routes.combined[0].moduleName;
+const { routes, utils } = it;
+const { classNameCase } = utils;
 %>
 
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, ResponseType } from "axios";
-import <%~ moduleName %> from './<%~ moduleName %>';
+<% routes.outOfModule && routes.outOfModule.forEach((route) => { %>
+import <%~ route.moduleName %> from './<%~ classNameCase(route.moduleName) %>';
+<% }) %>
 
+<% routes.combined && routes.combined.forEach(({ routes = [], moduleName }) => { %>
+import <%~ moduleName %> from './<%~ classNameCase(moduleName) %>';
+<% }) %>
 
-export type QueryParamsType = Record<string | number, any>;
-
-export class HttpClient<SecurityDataType = unknown> {
-    public instance: AxiosInstance;
-    private securityData: SecurityDataType | null = null;
-    private securityWorker?: ApiConfig<SecurityDataType>["securityWorker"];
-    private secure?: boolean;
-    private format?: ResponseType;
-
-    constructor({ securityWorker, secure, format, ...axiosConfig }: ApiConfig<SecurityDataType> = {}) {
-        this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || "<%~ apiConfig.baseUrl %>" })
-        this.secure = secure;
-        this.format = format;
-        this.securityWorker = securityWorker;
-    }
-
-    public setSecurityData = (data: SecurityDataType | null) => {
-        this.securityData = data
-    }
-
-    private mergeRequestParams(params1: AxiosRequestConfig, params2?: AxiosRequestConfig): AxiosRequestConfig {
-        return {
-            ...this.instance.defaults,
-            ...params1,
-            ...(params2 || {}),
-            headers: {
-                ...(this.instance.defaults.headers || {}),
-                ...(params1.headers || {}),
-                ...((params2 && params2.headers) || {}),
-            },
-        };
-    }
-
-    private createFormData(input: Record<string, unknown>): FormData {
-      return Object.keys(input || {}).reduce((formData, key) => {
-        const property = input[key];
-        formData.append(
-            key,
-            property instanceof Blob ?
-                property :
-            typeof property === "object" && property !== null ?
-                JSON.stringify(property) :
-            `${property}`
-        );
-        return formData;
-      }, new FormData())
-    }
-
-    public request = async <T = any, _E = any>({
-        secure,
-        path,
-        type,
-        query,
-        format,
-        body,
-        ...params
-<% if (config.unwrapResponseData) { %>
-    }: FullRequestParams): Promise<T> => {
-<% } else { %>
-    }: FullRequestParams): Promise<AxiosResponse<T>> => {
-<% } %>
-        const secureParams = ((typeof secure === 'boolean' ? secure : this.secure) && this.securityWorker && (await this.securityWorker(this.securityData))) || {};
-        const requestParams = this.mergeRequestParams(params, secureParams);
-        const responseFormat = (format && this.format) || void 0;
-
-        if (type === ContentType.FormData && body && body !== null && typeof body === "object") {
-          requestParams.headers.common = { Accept: "*/*" };
-          requestParams.headers.post = {};
-          requestParams.headers.put = {};
-
-          body = this.createFormData(body as Record<string, unknown>);
-        }
-
-        return this.instance.request({
-            ...requestParams,
-            headers: {
-                ...(type && type !== ContentType.FormData ? { "Content-Type": type } : {}),
-                ...(requestParams.headers || {}),
-            },
-            params: query,
-            responseType: responseFormat,
-            data: body,
-            url: path,
-<% if (config.unwrapResponseData) { %>
-        }).then(response => response.data);
-<% } else { %>
-        });
-<% } %>
+const modules = {
+    <% routes.outOfModule && routes.outOfModule.forEach((route) => { %>
+    <%~ route.moduleName %>,
+    <% }) %>
+    <% routes.combined && routes.combined.forEach(({ routes = [], moduleName }) => { %>
+    <%~ moduleName %>,
+    <% }) %>
     };
+};
+
+type Get<T, K> = K extends `${infer A}/${infer B}` ? A extends keyof T ? Get<T[A], B> : never : K extends keyof T ? T[K] : never
+
+type GenNode<K extends string | number, IsRoot extends boolean> = IsRoot extends true ? `${K}`: `/${K}` | (K extends number ? `[${K}]` | `/[${K}]` : never)
+
+type GetParams<T extends Function> = T extends (...args: infer A) => any ? A : never
+
+type ObjectKeyPaths<
+  T extends object,
+  IsRoot extends boolean = true,
+  K extends keyof T = keyof T
+> =
+K extends string | number ?
+  GenNode<K, IsRoot> | (T[K] extends object ? `${GenNode<K, IsRoot>}${ObjectKeyPaths<T[K], false>}` : never)
+  :never
+
+type Modules = typeof modules
+type ModuleKeys = keyof Modules
+type AllModulePath = ObjectKeyPaths<Modules>
+type ModuleFnPath = Exclude<AllModulePath, ModuleKeys>
+
+type RequestFn<T extends ModuleFnPath> = Get<Modules, T>
+export type RequestConfig<T = AxiosResponse> = Omit<JPRequestConfig<T, T>, 'url' | 'method' | 'data' | 'params'>
+type RequestParams<T extends ModuleFnPath> = Get<Modules, T> extends Function ? GetParams<Get<Modules, T>>[0] : never
+
+function useHttp<T extends ModuleFnPath>(module: T, moduleParams: RequestParams<T> | null, config: RequestConfig<ReturnType<RequestFn<T>>>): ReturnType<RequestFn<T>> {
+  type Module<K> = K extends `${infer A}/${infer B}` ? A extends ModuleKeys ? Module<B> : never : K extends ModuleKeys ? Modules[K] : never
+  const modulePath = module.split('/')
+  if (modulePath.length === 1)
+    throw new Error('请输入正确的方法路径')
+
+  const moduleName = modulePath[0] as ModuleKeys
+  const moduleFnName = modulePath.slice(1).join('/') as Module<T>
+
+  const requestRequest = modules[moduleName][moduleFnName] as RequestFn<T>
+  return requestRequest(moduleParams as any, config as any) as ReturnType<RequestFn<T>>
 }
+
+export default modules
