@@ -1,7 +1,7 @@
 import type { AxiosRequestConfig } from 'axios'
 import JPAxios from '../../src'
 
-export const instance = new JPAxios({
+export const instance = new JPAxios<{ code: number; data: any; message: string }>({
   interceptors: {
     requestInterceptor(config) {
       if (config.method === 'GET')
@@ -18,6 +18,6 @@ export const instance = new JPAxios({
     }
   }
 })
-
-export const get = <T>(url: string, params: AxiosRequestConfig['params']) => instance.get<T>({ url, params })
-export const post = <T>(url: string, params: AxiosRequestConfig['data']) => instance.post<T>({ url, params })
+export const request = instance.request
+export const get = (url: string, params: AxiosRequestConfig['params']) => instance.get({ url, params })
+export const post = (url: string, params: AxiosRequestConfig['data']) => instance.post({ url, params })

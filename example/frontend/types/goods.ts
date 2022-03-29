@@ -1,5 +1,5 @@
 export interface GoodsInfo {
-  request: { id: string }
+  request: { id: string; name: string; price: number }
   response: {
     id: string
     title: string
