@@ -1,6 +1,0 @@
-<%
-const { utils, moduleName, config } = it;
-console.log(moduleName)
-%>
-
-import <%~ moduleName %> from './<%~ moduleName %>';
