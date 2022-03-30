@@ -6,6 +6,8 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
  */
 export interface JPRequestConfig<T = Response, K = Response> extends AxiosRequestConfig {
   interceptors?: JPInterceptors<T, K>
+  loading?: boolean
+  [key: string]: any
 }
 
 /**
