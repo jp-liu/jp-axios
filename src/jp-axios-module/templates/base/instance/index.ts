@@ -1,10 +1,16 @@
-import JPAxios from '../../..'
+import JPAxios from 'jp-axios'
 import {
   requestInterceptor,
   requestInterceptorCatch,
   responseInterceptor,
   responseInterceptorCatch,
 } from '../interceptor/interceptor'
+
+export const enum ContentType {
+  Json = 'application/json',
+  FormData = 'multipart/form-data',
+  UrlEncoded = 'application/x-www-form-urlencoded'
+}
 
 /**
  * @description 导出实例

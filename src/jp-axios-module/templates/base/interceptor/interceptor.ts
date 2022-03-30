@@ -1,4 +1,4 @@
-import type { JPRequestConfig, Response } from '../../..'
+import type { JPRequestConfig, JPResponse } from 'jp-axios'
 
 import { handlerError } from '../error/error'
 
@@ -24,7 +24,7 @@ export function requestInterceptorCatch(err: any): any {
  *  - responseInterceptor<{ code: number, data: any, success: boolean }>
  *  - responseInterceptor<{ code: 200 | 302 | 404, data: any, success: boolean }>
  */
-export function responseInterceptor<T>(response: Response<T>): T | Response {
+export function responseInterceptor<T>(response: JPResponse<T>): T | JPResponse {
   // if (GlobalLoading.isStart) GlobalLoading.done()
   // if (response.data.code !== 200) handlerError(response.data, 'success')
 

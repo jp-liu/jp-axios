@@ -3,7 +3,7 @@ import { resolve } from 'path'
 import { generateApi } from 'swagger-typescript-api'
 generateApi({
   modular: true,
-  input: resolve(__dirname, './swagger.json'),
+  input: resolve(__dirname, './test/swagger.json'),
   output: resolve(__dirname, './module'),
   extractRequestParams: true,
   // because this script was called from package.json folder
