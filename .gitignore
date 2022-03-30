@@ -9,4 +9,4 @@ lib-cov
 logs
 node_modules
 temp
-src/jp-axios-module/module
+jp-module-test
