@@ -1,26 +1,26 @@
 
-import type { AxiosDefaults, AxiosInstance, AxiosResponse } from 'axios'
-import { JPAxios } from '../jp-axios/jp-axios'
-import type { Interceptor, JPInterceptors, JPRequestConfig } from '../jp-axios/jp-axios'
+import type { AxiosDefaults, AxiosInstance } from 'axios'
+import JPAxios from '..'
+import type { Interceptor, JPInterceptors, JPRequestConfig, Response } from '..'
 
 type Method = JPRequestConfig['method']
 
 export interface UseHttp {
-  <T = AxiosResponse>(url: string): Promise<T>
-  <T = AxiosResponse, K extends boolean = false>(config: JPRequestConfig<Interceptor<T, K>, T>): Promise<T>
-  <T = AxiosResponse, K extends boolean = false>(url: string, config?: Omit<JPRequestConfig<Interceptor<T, K>, T>, 'url'>): Promise<T>
-  <T = AxiosResponse, K extends boolean = false>(url: string, method: Method, config?: Omit<JPRequestConfig<Interceptor<T, K>, T>, 'url'| 'method'>): Promise<T>
+  <T = Response>(url: string): Promise<T>
+  <T = Response, K extends boolean = false>(config: JPRequestConfig<Interceptor<T, K>, T>): Promise<T>
+  <T = Response, K extends boolean = false>(url: string, config?: Omit<JPRequestConfig<Interceptor<T, K>, T>, 'url'>): Promise<T>
+  <T = Response, K extends boolean = false>(url: string, method: Method, config?: Omit<JPRequestConfig<Interceptor<T, K>, T>, 'url'| 'method'>): Promise<T>
   instance: AxiosInstance
   defaults: AxiosDefaults
-  request<T = AxiosResponse>(config: JPRequestConfig<T, T>): Promise<T>
-  get<T = AxiosResponse>(config: JPRequestConfig<T, T>): Promise<T>
-  post<T = AxiosResponse>(config: JPRequestConfig<T, T>): Promise<T>
-  put<T = AxiosResponse>(config: JPRequestConfig<T, T>): Promise<T>
-  delete<T = AxiosResponse>(config: JPRequestConfig<T, T>): Promise<T>
-  head<T = AxiosResponse>(config: JPRequestConfig<T, T>): Promise<T>
-  patch<T = AxiosResponse>(config: JPRequestConfig<T, T>): Promise<T>
-  options<T = AxiosResponse>(config: JPRequestConfig<T, T>): Promise<T>
-  use<T = AxiosResponse, K extends boolean = false>(interceptors: JPInterceptors<Interceptor<T, K>, T>): void
+  request<T = Response>(config: JPRequestConfig<T, T>): Promise<T>
+  get<T = Response>(config: JPRequestConfig<T, T>): Promise<T>
+  post<T = Response>(config: JPRequestConfig<T, T>): Promise<T>
+  put<T = Response>(config: JPRequestConfig<T, T>): Promise<T>
+  delete<T = Response>(config: JPRequestConfig<T, T>): Promise<T>
+  head<T = Response>(config: JPRequestConfig<T, T>): Promise<T>
+  patch<T = Response>(config: JPRequestConfig<T, T>): Promise<T>
+  options<T = Response>(config: JPRequestConfig<T, T>): Promise<T>
+  use<T = Response, K extends boolean = false>(interceptors: JPInterceptors<Interceptor<T, K>, T>): void
 }
 
 const jpAxiosInstance = new JPAxios()

@@ -61,8 +61,8 @@ describe('jp-axios hooks api', () => {
         },
       },
     })
-    expect(reqArr).toMatchObject(['first request'])
-    expect(resArr).toMatchObject(['first response'])
+    expect(reqArr.length).toBe(2)
+    expect(resArr.length).toBe(2)
     expect(res1).toMatchObject(res2)
   })
 
