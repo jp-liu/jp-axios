@@ -5,9 +5,15 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
  * @description 扩展 `AxiosRequestConfig`, 使用时可以传递专属拦截器
  */
 export interface JPRequestConfig<T = Response, K = Response> extends AxiosRequestConfig {
+  /**
+   * @description 拦截器
+   */
   interceptors?: JPInterceptors<T, K>
+
+  /**
+   * @description 请求状态开始,是否展示loading
+   */
   loading?: boolean
-  [key: string]: any
 }
 
 /**
