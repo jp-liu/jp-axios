@@ -3,48 +3,34 @@ import { useHttp } from '..'
 
 describe('jp-axios hooks api', () => {
   test('happy path, useHttp', async() => {
+    const res = {
+      name: '小明',
+      age: 18,
+      height: 1.88,
+    }
+
     const res1 = await useHttp<{
       data: { name: string; age: number; height: number }
     }>('http://localhost:3000/user/info', 'GET')
+
     const res2 = await useHttp<{
       data: { name: string; age: number; height: number }
     }>({ url: 'http://localhost:3000/user/info', method: 'get' })
+
     const res3 = await useHttp.get<{
       data: { name: string; age: number; height: number }
     }>({ url: 'http://localhost:3000/user/info' })
-    expect(res1.data).toMatchObject({
-      name: '小明',
-      age: 18,
-      height: 1.88,
-    })
-    expect(res2.data).toMatchObject({
-      name: '小明',
-      age: 18,
-      height: 1.88,
-    })
-    expect(res3.data).toMatchObject({
-      name: '小明',
-      age: 18,
-      height: 1.88,
-    })
+
+    expect(res1.data).toMatchObject(res)
+    expect(res2.data).toMatchObject(res)
+    expect(res3.data).toMatchObject(res)
   })
   test('useHttp hooks interface interceptor', async() => {
     const reqArr: string[] = []
     const resArr: string[] = []
     const res1 = await useHttp<{
       data: { name: string; age: number; height: number }
-    }, true>('http://localhost:3000/user/info', 'GET', {
-      interceptors: {
-        requestInterceptor(config) {
-          reqArr.push('first request')
-          return config
-        },
-        responseInterceptor(res) {
-          resArr.push('first response')
-          return res.data
-        },
-      },
-    })
+    }, true>('http://localhost:3000/user/info', {})
     const res2 = await useHttp<{
       data: { name: string; age: number; height: number }
     }, true>({
