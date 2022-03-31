@@ -6,26 +6,26 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceRoot}/node_modules/ts-node/dist/bin.js",
-      "args": [
-        "${relativeFile}"
-      ],
+      "args": ["${relativeFile}"],
       "cwd": "${workspaceRoot}",
       "protocol": "inspector"
     },
     {
+      "name": "Debug test:--generate module",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "test:--generate module"]
+    },
+    {
       "type": "pwa-node",
       "request": "launch",
-      "name": "Debug Current Test File",
+      "name": "Debug vitest",
       "autoAttachChildProcesses": true,
-      "skipFiles": [
-        "<node_internals>/**",
-        "**/node_modules/**"
-      ],
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
       "program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
-      "args": [
-        "run",
-        "${relativeFile}"
-      ],
+      "args": ["run", "${relativeFile}"],
       "smartStep": true,
       "console": "integratedTerminal"
     }

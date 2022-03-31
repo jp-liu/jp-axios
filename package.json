@@ -31,7 +31,8 @@
   "scripts": {
     "dev": "tsup --sourcemap --watch --dts --format esm,cjs",
     "test": "vitest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:--generate module": "ts-node ./src/jp-axios-module/index.ts"
   },
   "dependencies": {
     "axios": "^0.26.1",
