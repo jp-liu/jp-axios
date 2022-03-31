@@ -56,7 +56,7 @@ let wrapperArgs = _
 // 分解参数,支持 `useModule` 调用
 const requestConfig = wrapperArgs.pop();
 if (wrapperArgs.length === 0) {
-    wrapperArgs = ['noParams: null', requestConfig]
+    wrapperArgs = ['noParams: {} | null', requestConfig]
 } else {
     wrapperArgs = argToApi(wrapperArgs)
 }
