@@ -56,6 +56,13 @@ export const copyFile = (src: string, dest: string) => {
   }
   catch (err) {}
 }
+export const renameFileOrDir = (src: string, dest: string) => {
+  if (!src || !dest) return
+  try {
+    fs.renameSync(src, dest)
+  }
+  catch (err) {}
+}
 
 export const writeFile = (path: string, content: string) => {
   if (!path) return
