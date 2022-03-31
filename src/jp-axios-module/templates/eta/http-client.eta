@@ -30,7 +30,7 @@ type RequestFn<T extends ModuleFnPath> = Get<Modules, T>
 export type RequestConfig<T = Response> = Omit<JPRequestConfig<T, T>, 'url' | 'method' | 'data' | 'params'>
 type RequestParams<T extends ModuleFnPath> = Get<Modules, T> extends Function ? GetParams<Get<Modules, T>>[0] : never
 
-export function useModule<T extends ModuleFnPath>(module: T, moduleParams: RequestParams<T> | null, config: RequestConfig<ReturnType<RequestFn<T>>>): ReturnType<RequestFn<T>> {
+export function useModule<T extends ModuleFnPath>(module: T, moduleParams: RequestParams<T> | null, config?: RequestConfig<ReturnType<RequestFn<T>>>): ReturnType<RequestFn<T>> {
   type Module<K> = K extends `${infer A}/${infer B}` ? A extends ModuleKeys ? Module<B> : never : K extends ModuleKeys ? Modules[K] : never
   const modulePath = module.split('/')
   if (modulePath.length === 1)
