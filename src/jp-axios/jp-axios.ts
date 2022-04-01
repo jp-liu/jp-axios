@@ -1,47 +1,33 @@
 import axios from 'axios'
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-
-/**
- * @description 扩展 `AxiosRequestConfig`, 使用时可以传递专属拦截器
- */
-export interface JPRequestConfig<T = JPResponse, K = JPResponse> extends AxiosRequestConfig {
-  /**
-   * @description 拦截器
-   */
-  interceptors?: JPInterceptors<T, K>
-
-  /**
-   * @description 请求状态开始,是否展示loading
-   */
-  loading?: boolean
-}
-
-/**
- * @description 封装拦截器接口
- */
-export interface JPInterceptors<T = JPResponse, K = JPResponse> {
-  requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig
-  requestInterceptorCatch?: (err: any) => any
-  responseInterceptor?: (res: T) => K
-  responseInterceptorCatch?: (err: any) => any
-}
-
-/**
- * @description 将响应类型给外部使用
- */
-export interface JPResponse<T = any> extends AxiosResponse<T, any> {}
-
-/**
- * @description 判断拦截器的入参和出参
- */
-export type Interceptor<T, K extends boolean = false> = K extends true ? JPResponse<T> : T
+import type { AxiosError, AxiosInstance, Canceler } from 'axios'
+import type { CancelToken, Interceptor, JPInterceptors, JPRequestConfig, JPResponse } from './types'
 
 export class JPAxios<T = JPResponse> {
   instance: AxiosInstance
   interceptors?: JPInterceptors<JPResponse<T>, T>
+  private abortControllers = new Map<CancelToken, AbortController | Canceler>()
   constructor(config?: JPRequestConfig<JPResponse<T>, T>) {
     this.instance = axios.create(config)
     this.interceptors = config?.interceptors
+
+    if (config?.removeRepeat) {
+      const requestInterceptor = (config: JPRequestConfig) => {
+        this.removePending(config)
+        this.addPending(config)
+        return config
+      }
+
+      const responseInterceptor = (response: JPResponse) => {
+        this.removePending(response.config)
+        return response
+      }
+
+      const responseInterceptorCatch = (error: AxiosError) => {
+        error.config && this.removePending(error.config)
+        return Promise.reject(error)
+      }
+      this.use({ requestInterceptor, responseInterceptor, responseInterceptorCatch })
+    }
 
     // 定义的组件实例拦截器
     this.interceptors && this.use(this.interceptors as any)
@@ -122,6 +108,46 @@ export class JPAxios<T = JPResponse> {
       interceptors?.responseInterceptor as any,
       interceptors?.responseInterceptorCatch
     )
+  }
+
+  /** ******* 根据配置提供是否删除重复请求  **********/
+  /**
+   * 生成每个请求唯一的键
+   */
+  private getPendingKey(config: JPRequestConfig): string {
+    // 如果提供取消方式,则取消自己的逻辑
+    if (config.signal || config.cancelToken) return ''
+    let { data } = config
+    const { url, method, params } = config
+    if (typeof data === 'string') data = JSON.parse(data) // response里面返回的config.data是个字符串对象
+    return [url, method, JSON.stringify(params), JSON.stringify(data)].join('&')
+  }
+
+  /**
+   * 储存每个请求唯一值, 也就是cancel()方法, 用于取消请求
+   */
+  private addPending(config: JPRequestConfig) {
+    // 如果提供取消方式,则取消自己的逻辑
+    if (config.signal || config.cancelToken) return
+    const pendingKey = this.getPendingKey(config)
+    config.cancelToken = config.cancelToken || new axios.CancelToken((cancel) => {
+      if (!this.abortControllers.has(pendingKey))
+        this.abortControllers.set(pendingKey, cancel)
+    })
+  }
+
+  /**
+   * 删除重复的请求
+   */
+  private removePending(config: JPRequestConfig) {
+    // 如果提供取消方式,则取消自己的逻辑
+    if (config.signal || config.cancelToken) return
+    const pendingKey = this.getPendingKey(config)
+    if (this.abortControllers.has(pendingKey)) {
+      const cancelToken = this.abortControllers.get(pendingKey)
+      ;(cancelToken as Canceler)(pendingKey)
+      this.abortControllers.delete(pendingKey)
+    }
   }
 }
 
