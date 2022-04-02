@@ -2,6 +2,16 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "node",
+      "request": "launch",
+      "name": "启动Koa调试服务",
+      "program": "${workspaceFolder}/example/backend/backend.ts",
+      "runtimeExecutable": "nodemon",
+      "restart": true,
+      "console": "integratedTerminal",
+      "skipFiles": ["${workspaceRoot}/node_modules/**/*.js","<node_internals>/**"]
+    },
+    {
       "name": "Current TS File",
       "type": "node",
       "request": "launch",

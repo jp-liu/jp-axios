@@ -10,11 +10,15 @@ router.get('/', async(ctx) => {
 })
 
 router.get('user', '/user/info', async(ctx) => {
+  const delayTime = +ctx.request.query.delay!
+  await ctx.sleep(delayTime)
+  // 三秒后返回数据
   ctx.body = {
     name: '小明',
     age: 18,
     height: 1.88
   }
+  // await next()
 })
 
 router.post('user', '/user/post', async(ctx) => {
@@ -42,6 +46,14 @@ router.post('goods', '/goods/info', async(ctx) => {
     }
   }, 2000)
 })
+
+app.context.sleep = function(time: number) {
+  return new Promise<void>((resolve) => {
+    setTimeout(() => {
+      resolve()
+    }, time)
+  })
+}
 
 app.use(bodyparser())
 app.use(router.routes())

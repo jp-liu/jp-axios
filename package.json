@@ -29,7 +29,8 @@
     "dist"
   ],
   "scripts": {
-    "dev": "tsup --sourcemap --watch --dts --format esm,cjs",
+    "dev": "nodemon ./example/backend/backend.ts",
+    "build": "tsup --sourcemap --watch --dts --format esm,cjs",
     "test": "vitest",
     "lint": "eslint .",
     "test:--generate module": "ts-node ./src/jp-axios-module/index.ts"
