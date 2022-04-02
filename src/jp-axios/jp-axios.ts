@@ -1,16 +1,14 @@
 import axios from 'axios'
 import type { AxiosError, AxiosInstance, Canceler } from 'axios'
-import type { CancelToken, Interceptor, JPInterceptors, JPRequestConfig, JPResponse } from './types'
+import type { Interceptor, JPInterceptors, JPRequestConfig, JPResponse } from './types'
 
 export class JPAxios<T = JPResponse> {
   instance: AxiosInstance
   removeRepeat: boolean
-  interceptors?: JPInterceptors<JPResponse<T>, T>
-  private abortControllers = new Map<CancelToken, AbortController | Canceler>()
+  private abortControllers = new Map<string, Canceler>()
   constructor(config?: JPRequestConfig<JPResponse<T>, T>) {
     this.instance = axios.create(config)
     this.removeRepeat = !!config?.removeRepeat
-    this.interceptors = config?.interceptors
 
     if (this.removeRepeat) {
       const requestInterceptor = (config: JPRequestConfig) => {
@@ -32,7 +30,7 @@ export class JPAxios<T = JPResponse> {
     }
 
     // 定义的组件实例拦截器
-    this.interceptors && this.use(this.interceptors as any)
+    config?.interceptors && this.use(config?.interceptors as any)
   }
 
   request<T = JPResponse>(config: JPRequestConfig<T, T>): Promise<T> {
@@ -151,7 +149,7 @@ export class JPAxios<T = JPResponse> {
     const pendingKey = this.getPendingKey(config)
     if (this.abortControllers.has(pendingKey)) {
       const cancelToken = this.abortControllers.get(pendingKey)
-      ;(cancelToken as Canceler)(pendingKey)
+      cancelToken!(pendingKey)
       this.abortControllers.delete(pendingKey)
     }
   }
