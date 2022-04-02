@@ -1,8 +1,16 @@
-import { describe, expect, test } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import JPAxios from '..'
 
+const delay = () => {
+  return new Promise<void>((resolve) => {
+    setTimeout(() => {
+      resolve()
+    }, 1000)
+  })
+}
+
 describe('jp-axios', () => {
-  test('happy path, use jp-axios', async() => {
+  it('happy path, use jp-axios', async() => {
     const instance = new JPAxios()
     const res = await instance.get({ url: 'http://localhost:3000/user/info' })
     expect(res.data).toMatchObject({
@@ -21,7 +29,7 @@ describe('jp-axios', () => {
     expect(res1.data).toBe(true)
   })
 
-  test('instance interceptor', async() => {
+  it('instance interceptor', async() => {
     let dummy = 0
     let response = 0
     const instance = new JPAxios<{ id: 123 }>({
@@ -53,7 +61,7 @@ describe('jp-axios', () => {
     })
   })
 
-  test('instance call use for add interceptor', async() => {
+  it('instance call use for add interceptor', async() => {
     const requestArr: string[] = []
     const responseArr: string[] = []
     const instance = new JPAxios()
@@ -94,7 +102,7 @@ describe('jp-axios', () => {
     })
   })
 
-  test('interface interceptor', async() => {
+  it('interface interceptor', async() => {
     const requestArr: string[] = []
     const responseArr: string[] = []
     const instance = new JPAxios()
@@ -138,6 +146,81 @@ describe('jp-axios', () => {
       job: 'xdm',
     })
   })
+
+  it.only('should remove repeat request for a instance all request', async() => {
+    let res1, res2, res3
+    const instance = new JPAxios({ removeRepeat: true })
+    instance.request({
+      url: 'http://localhost:3000/user/info',
+      method: 'GET',
+      params: {
+        id: '123321',
+        delay: 3000
+      }
+    }).then(res => res1 = res).catch(err => res1 = err)
+    await delay()
+    instance.request({
+      url: 'http://localhost:3000/user/info',
+      method: 'GET',
+      params: {
+        id: '123321',
+        delay: 3000
+      }
+    }).then(res => res2 = res).catch(err => res2 = err)
+    await delay()
+    await instance.request({
+      url: 'http://localhost:3000/user/info',
+      method: 'GET',
+      params: {
+        id: '123321',
+        delay: 3000
+      }
+    }).then(res => res3 = res).catch(err => res3 = err)
+
+    expect(res1).toMatchObject({
+      message: 'http://localhost:3000/user/info&get&{"id":"123321","delay":3000}&'
+    })
+    expect(res2).toMatchObject({
+      message: 'http://localhost:3000/user/info&get&{"id":"123321","delay":3000}&'
+    })
+    expect((res3 as any).data).toMatchObject({
+      name: '小明',
+      age: 18,
+      height: 1.88,
+    })
+  }, 10000)
+
+  it.only('remove repeat request for single request', async() => {
+    const instance = new JPAxios()
+    const req = () =>
+      instance.request({
+        url: 'http://localhost:3000/user/info',
+        method: 'GET',
+        params: {
+          id: '123321',
+          delay: 3000
+        },
+        removeRepeat: true
+      })
+    const res1 = req()
+    await delay()
+    const res2 = req()
+    await delay()
+    const res3 = req()
+    await res3
+
+    expect(res1).toMatchObject({
+      message: 'http://localhost:3000/user/info&get&{"id":"123321","delay":3000}&'
+    })
+    expect(res2).toMatchObject({
+      message: 'http://localhost:3000/user/info&get&{"id":"123321","delay":3000}&'
+    })
+    expect((res3 as any).data).toMatchObject({
+      name: '小明',
+      age: 18,
+      height: 1.88,
+    })
+  }, 10000)
 
   // test('support hook usage', async() => {
   //   const res = await useHttp({ url: 'http://localhost:3000/user/info', method: 'get' })

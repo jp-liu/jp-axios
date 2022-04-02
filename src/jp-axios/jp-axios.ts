@@ -4,13 +4,15 @@ import type { CancelToken, Interceptor, JPInterceptors, JPRequestConfig, JPRespo
 
 export class JPAxios<T = JPResponse> {
   instance: AxiosInstance
+  removeRepeat: boolean
   interceptors?: JPInterceptors<JPResponse<T>, T>
   private abortControllers = new Map<CancelToken, AbortController | Canceler>()
   constructor(config?: JPRequestConfig<JPResponse<T>, T>) {
     this.instance = axios.create(config)
+    this.removeRepeat = !!config?.removeRepeat
     this.interceptors = config?.interceptors
 
-    if (config?.removeRepeat) {
+    if (this.removeRepeat) {
       const requestInterceptor = (config: JPRequestConfig) => {
         this.removePending(config)
         this.addPending(config)
@@ -39,6 +41,12 @@ export class JPAxios<T = JPResponse> {
       if (config.interceptors?.requestInterceptor)
         config = config.interceptors?.requestInterceptor(config)
 
+      // 单接口开启取消重复请求,如果全局开启了,则不处理
+      if (config.removeRepeat && !this.removeRepeat) {
+        this.removePending(config as any)
+        this.addPending(config as any)
+      }
+
       // 进行请求
       this.instance
         .request<any, T>(config)
@@ -51,6 +59,10 @@ export class JPAxios<T = JPResponse> {
         })
         .catch((err) => {
           reject(err)
+        })
+        .finally(() => {
+          if (config.removeRepeat && !this.removeRepeat)
+            this.removePending(config as any)
         })
     })
   }
@@ -115,8 +127,6 @@ export class JPAxios<T = JPResponse> {
    * 生成每个请求唯一的键
    */
   private getPendingKey(config: JPRequestConfig): string {
-    // 如果提供取消方式,则取消自己的逻辑
-    if (config.signal || config.cancelToken) return ''
     let { data } = config
     const { url, method, params } = config
     if (typeof data === 'string') data = JSON.parse(data) // response里面返回的config.data是个字符串对象
@@ -127,8 +137,6 @@ export class JPAxios<T = JPResponse> {
    * 储存每个请求唯一值, 也就是cancel()方法, 用于取消请求
    */
   private addPending(config: JPRequestConfig) {
-    // 如果提供取消方式,则取消自己的逻辑
-    if (config.signal || config.cancelToken) return
     const pendingKey = this.getPendingKey(config)
     config.cancelToken = config.cancelToken || new axios.CancelToken((cancel) => {
       if (!this.abortControllers.has(pendingKey))
@@ -140,8 +148,6 @@ export class JPAxios<T = JPResponse> {
    * 删除重复的请求
    */
   private removePending(config: JPRequestConfig) {
-    // 如果提供取消方式,则取消自己的逻辑
-    if (config.signal || config.cancelToken) return
     const pendingKey = this.getPendingKey(config)
     if (this.abortControllers.has(pendingKey)) {
       const cancelToken = this.abortControllers.get(pendingKey)
