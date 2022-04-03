@@ -5,6 +5,9 @@ importers:
   .:
     specifiers:
       '@antfu/eslint-config': ^0.18.5
+      '@jp-liu/api': workspace:^0.0.1
+      '@jp-liu/axios': workspace:^0.0.1
+      '@jp-liu/hook': workspace:^0.0.1
       '@koa/router': ^10.1.1
       '@types/koa': ^2.13.4
       '@types/koa__router': ^8.0.11
@@ -21,6 +24,9 @@ importers:
       typescript: ^4.6.2
       vitest: ^0.7.7
     dependencies:
+      '@jp-liu/api': link:packages/api
+      '@jp-liu/axios': link:packages/axios
+      '@jp-liu/hook': link:packages/hook
       axios: registry.npmmirror.com/axios/0.26.1
       make-dir: 3.1.0
     devDependencies:
@@ -38,6 +44,15 @@ importers:
       tsup: 5.12.1_ts-node@10.7.0+typescript@4.6.2
       typescript: 4.6.2
       vitest: 0.7.7
+
+  packages/api:
+    specifiers: {}
+
+  packages/axios:
+    specifiers: {}
+
+  packages/hook:
+    specifiers: {}
 
 packages:
 
