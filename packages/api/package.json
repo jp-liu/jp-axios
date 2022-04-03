@@ -1,0 +1,25 @@
+{
+  "name": "@jp-liu/api",
+  "version": "0.0.1",
+  "description": "A tool that automatically generates and encapsulates Axios according to swagger or OpenAPI",
+  "keywords": [
+    "swagger",
+    "swagger-ui",
+    "generate",
+    "generate-api",
+    "jp-axios",
+    "axios",
+    "http",
+    "request"
+  ],
+  "license": "MIT",
+  "author": "jp-liu <fortune_coder@foxmail.com>",
+  "main": "index.js",
+  "scripts": {
+    "test": "ts-node ./src/jp-axios-module/index.ts"
+  },
+  "dependencies": {
+    "make-dir": "^3.1.0",
+    "swagger-typescript-api": "^9.3.1"
+  }
+}

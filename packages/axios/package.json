@@ -1,0 +1,24 @@
+{
+  "name": "@jp-liu/axios",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [
+    "axios",
+    "request",
+    "http"
+  ],
+  "license": "MIT",
+  "author": "jp-liu <fortune_coder@foxmail.com>",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "scripts": {
+    "test": "vitest",
+    "build": "tsup --sourcemap --watch --dts --format esm,cjs"
+  },
+  "peerDependencies": {
+    "axios": "^0.26.1"
+  },
+  "dependencies": {
+    "axios": "^0.26.1"
+  }
+}

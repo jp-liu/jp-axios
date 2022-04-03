@@ -1,0 +1,15 @@
+{
+  "name": "examples",
+  "author": "jp-liu <fortune_coder@foxmail.com>",
+  "scripts": {
+    "dev": "nodemon ./backend/backend.ts"
+  },
+  "devDependencies": {
+    "@koa/router": "^10.1.1",
+    "@types/koa": "^2.13.4",
+    "@types/koa-bodyparser": "^4.3.6",
+    "@types/koa__router": "^8.0.11",
+    "koa": "^2.13.4",
+    "koa-bodyparser": "^4.3.0"
+  }
+}
