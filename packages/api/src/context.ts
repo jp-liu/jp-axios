@@ -70,10 +70,10 @@ function handleTemplatePath(context: GenerateContext) {
   const isDebug = cwd.includes('/packages/api')
   const isNodeModules = !cwd.includes('/jp-axios') && isDebug
   context.templatePath = isDebug
-    ? './src/templates/eta'
+    ? './templates/eta'
     : !isNodeModules
-      ? './packages/api/src/templates/eta'
-      : './node_modules/@jpliu/api/src/templates/eta'
+      ? './packages/api/templates/eta'
+      : './node_modules/@jpliu/api/templates/eta'
 }
 
 function arrayInputOrOutput(inputOrOutput: string | ArrayInputOrOutputModel[]) {

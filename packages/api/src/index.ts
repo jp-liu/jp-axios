@@ -1,7 +1,5 @@
-import path from 'path'
-import { generateModuleApi } from './generate'
+import { getGenerateModuleConfig } from './config'
+import { generateModule } from './generate'
 
-const input = path.resolve(__dirname, './test/swagger.yaml')
-const output = path.resolve(__dirname, './test/module')
-
-generateModuleApi({ input, output })
+const config = getGenerateModuleConfig()
+generateModule(config)
