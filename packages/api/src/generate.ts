@@ -1,91 +1,50 @@
-import { resolve } from 'path'
 import { generateApi } from 'swagger-typescript-api'
 import { createGenerateContext } from './context'
-import { cleanDir, pathIsExist, readDir, removeHeadComment, renameFileOrDir, renderTemplate } from './utils'
+import { getEntryType, removeHeadComment, renameApiFile, renderBaseTemplate } from './utils'
 
-import type { GenerateConfig, GenerateContext } from './types/jp-axios-module'
+import type { ArrayInputOrOutputModel, EntryType, GenerateConfig } from './types'
 
-/**
- * @description 获取入口类型
- */
-function getEntryType(context: GenerateContext): 'input' | 'url' | 'spec' {
-  const { input, url, spec } = context
-
-  if (input)
-    return 'input'
-
-  if (url) {
-    if (
-      !/((http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?)/.test(
-        url
-      )
-    )
-      throw new Error(`url ${url} is not a network address`)
-    return 'url'
-  }
-
-  if (spec) return 'spec'
-
-  throw new Error('input, url or spec must be provided')
-}
-
-/**
- * @description 生成通用请求模板
- */
-function generateBaseTemplate(context: GenerateContext) {
-  const { output, overwrite } = context
-  const baseFilePath = resolve(__dirname, './templates/base')
-
-  // 如果不需要重写,并且出口文件夹存在,则看看内部有没有缺失部分
-  if (!overwrite && pathIsExist(output)) {
-    const baseFilesName = ['error', 'instance', 'interceptor', 'types', 'index.ts']
-    const files = readDir(output)
-    baseFilesName.forEach((fileName) => {
-      if (files.includes(fileName)) return
-      renderTemplate(`${baseFilePath}/${fileName}`, `${output}/${fileName}`)
-    })
-  }
-  // 如果需要重写,或者出口文件夹不存在,则为第一次创建
-  // 先清空文件夹,然后拷贝模板
-  else {
-    cleanDir(output)
-    renderTemplate(baseFilePath, output)
-  }
-}
-
-/**
- * @description 变更`Api`文件名字,并迁移到`types`文件夹内
- */
-function renameApiFile(outputPath: string) {
-  if (!outputPath) return
-
-  renameFileOrDir(
-    `${outputPath}/module/data-contracts.ts`,
-    `${outputPath}/types/interface.ts`
-  )
-}
-
-export function generateModuleApi(config: Omit<GenerateConfig, 'input' | 'url'>): void
-export function generateModuleApi(config: Omit<GenerateConfig, 'input' | 'spec'>): void
-export function generateModuleApi(config: Omit<GenerateConfig, 'url' | 'spec'>): void
-export function generateModuleApi(config: any): void {
+export function generateModule(config: Omit<GenerateConfig, 'input' | 'url'>): void
+export function generateModule(config: Omit<GenerateConfig, 'input' | 'spec'>): void
+export function generateModule(config: Omit<GenerateConfig, 'url' | 'spec'>): void
+export function generateModule(config: any): void {
   const { output } = config
   if (!output) throw new Error('output must be provided')
 
-  const context = createGenerateContext(config)
+  const entryType = getEntryType(config)
+  const context = createGenerateContext(config, entryType)
 
-  const inputType = getEntryType(context)
+  // 多入口
+  const overwrite = context.overwrite!
+  if (context.isArrayInput) {
+    const entryPaths = context[entryType] as ArrayInputOrOutputModel[]
+    const outputPaths = context.output as ArrayInputOrOutputModel[]
+    const modulePaths = context.modulePath as ArrayInputOrOutputModel[]
+    for (let i = 0; i < entryPaths.length; i++) {
+      const entry = entryPaths[i]
+      const output = outputPaths.find(out => out.dirName === entry.dirName)!.path
+      const module = modulePaths.find(mod => mod.dirName === entry.dirName)!.path
+      renderBaseTemplate(output, overwrite)
+      generateModuleApi(entry.path, module, output, entryType)
+    }
+    return
+  }
 
-  generateBaseTemplate(context)
+  // 单入口
+  renderBaseTemplate(context.output as string, overwrite)
+  generateModuleApi(context[entryType] as string, context.modulePath as string, context.output as string, entryType)
+}
 
+function generateModuleApi<T extends EntryType>(entryPath: string, modulePath: string, output: string, entryType: T) {
   generateApi({
     modular: true,
-    [inputType as 'input']: context[inputType] as string,
-    output: resolve(output, './module'),
+    [entryType as 'input']: entryPath,
+    output: modulePath,
     extractRequestParams: true,
     // because this script was called from package.json folder
-    templates: './src/jp-axios-module/templates/eta',
+    templates: './packages/api/src/templates/eta',
   }).then(() => {
+    // 1.多出口需要拷贝多份
     // 1.去除头部注释
     removeHeadComment(output)
     // 2.重命名`api`文件,使其更具语义化
