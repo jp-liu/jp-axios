@@ -25,24 +25,24 @@ export function generateModule(config: any): void {
       const output = outputPaths.find(out => out.dirName === entry.dirName)!.path
       const module = modulePaths.find(mod => mod.dirName === entry.dirName)!.path
       renderBaseTemplate(output, overwrite)
-      generateModuleApi(entry.path, module, output, entryType)
+      generateModuleApi(entry.path, module, output, context.templatePath, entryType)
     }
     return
   }
 
   // 单入口
   renderBaseTemplate(context.output as string, overwrite)
-  generateModuleApi(context[entryType] as string, context.modulePath as string, context.output as string, entryType)
+  generateModuleApi(context[entryType] as string, context.modulePath as string, context.output as string, context.templatePath, entryType)
 }
 
-function generateModuleApi<T extends EntryType>(entryPath: string, modulePath: string, output: string, entryType: T) {
+function generateModuleApi<T extends EntryType>(entryPath: string, modulePath: string, output: string, templates: string, entryType: T) {
   generateApi({
     modular: true,
     [entryType as 'input']: entryPath,
     output: modulePath,
     extractRequestParams: true,
     // because this script was called from package.json folder
-    templates: './packages/api/src/templates/eta',
+    templates,
   }).then(() => {
     // 1.多出口需要拷贝多份
     // 1.去除头部注释
