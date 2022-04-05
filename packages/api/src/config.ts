@@ -23,9 +23,12 @@ export function getGenerateModuleConfig(): GenerateConfig {
   else if (pathIsExist(jsonConfigPath))
   // eslint-disable-next-line @typescript-eslint/no-var-requires
     configfile = require(jsonConfigPath)
-  console.log(pkgConfig, configfile)
 
   // 3.判断配置信息
   const config = configfile || pkgConfig || null
+  if (!config)
+    // no configuration
+    throw new Error('No configuration information detected')
+
   return config
 }
