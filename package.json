@@ -33,9 +33,23 @@
     "lint": "eslint .",
     "build": "tsup --sourcemap --watch --dts --format esm,cjs",
     "test": "vitest",
-    "test:api": "pnpm -C api test",
-    "test:axios": "pnpm -C axios test",
+    "test:api-single": "pnpm -C packages/api test:--single",
+    "test:api-multiple": "pnpm -C packages/api test:--multiple",
+    "test:axios": "pnpm -C axios packages/test",
     "test:hook": "pnpm -C hook test"
+  },
+  "jp-api": {
+    "input": [
+      {
+        "dirName": "test1",
+        "path": "./packages/api/src/test/swagger.json"
+      },
+      {
+        "dirName": "test2",
+        "path": "./packages/api/src/test/swagger.json"
+      }
+    ],
+    "output": "./examples/test"
   },
   "dependencies": {
     "@jp-liu/api": "workspace:^0.0.1",

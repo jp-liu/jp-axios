@@ -9,7 +9,7 @@
       "runtimeExecutable": "nodemon",
       "restart": true,
       "console": "integratedTerminal",
-      "skipFiles": ["${workspaceRoot}/node_modules/**/*.js","<node_internals>/**"]
+      "skipFiles": ["${workspaceRoot}/node_modules/**/*.js", "<node_internals>/**"]
     },
     {
       "name": "Current TS File",
@@ -21,12 +21,20 @@
       "protocol": "inspector"
     },
     {
-      "name": "Debug test:--generate module",
+      "name": "Debug test:--generate single module",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "test:--generate module"]
+      "runtimeArgs": ["run-script", "test:api-single"]
+    },
+    {
+      "name": "Debug test:--generate multiple module",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "test:api-multiple"]
     },
     {
       "type": "pwa-node",
