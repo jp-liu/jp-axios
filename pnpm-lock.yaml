@@ -49,7 +49,7 @@ importers:
 
   packages/api:
     specifiers:
-      '@jp-axios/core': workspace:^0.0.4
+      '@jp-axios/core': workspace:*
       make-dir: ^3.1.0
       swagger-typescript-api: ^9.3.1
     dependencies:
@@ -65,7 +65,7 @@ importers:
 
   packages/hook:
     specifiers:
-      '@jp-axios/core': workspace:^0.0.4
+      '@jp-axios/core': workspace:*
     dependencies:
       '@jp-axios/core': link:../core
 

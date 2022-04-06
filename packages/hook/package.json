@@ -36,9 +36,9 @@
     "dist"
   ],
   "peerDependencies": {
-    "@jp-axios/core": "workspace:^0.0.4"
+    "@jp-axios/core": "workspace:*"
   },
   "dependencies": {
-    "@jp-axios/core": "workspace:^0.0.4"
+    "@jp-axios/core": "workspace:*"
   }
 }
