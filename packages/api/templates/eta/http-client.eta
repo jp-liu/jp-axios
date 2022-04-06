@@ -5,7 +5,7 @@ const { classNameCase } = utils;
 <% routes.outOfModule && routes.outOfModule.forEach((route) => { %>
 import <%~ route.moduleName %> from './<%~ classNameCase(route.moduleName) %>';
 <% }) %>
-import type { JPRequestConfig, JPResponse } from "@jp-liu/axios";
+import type { JPRequestConfig, JPResponse } from "@jp-axios/core";
 import type { Get, GetParams, ObjectKeyPaths } from '../types/utils';
 
 <% routes.combined && routes.combined.forEach(({ routes = [], moduleName }) => { %>
