@@ -40,5 +40,8 @@ jobs:
       - name: Build
         run: nr build
 
+      - name: OpenKoaService
+        run: nr dev
+
       - name: Test
         run: nr test --if-present
