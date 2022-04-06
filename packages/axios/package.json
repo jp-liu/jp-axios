@@ -2,6 +2,10 @@
   "name": "@jp-liu/axios",
   "version": "0.0.1",
   "description": "",
+  "homepage": "https://github.com/jp-liu/jp-axios/packages/axios/#readme",
+  "bugs": {
+    "url": "https://github.com/jp-liu/jp-axios/issues"
+  },
   "keywords": [
     "axios",
     "request",
@@ -11,10 +15,25 @@
   "author": "jp-liu <fortune_coder@foxmail.com>",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "test": "vitest",
     "build": "tsup --sourcemap --watch --dts --format esm,cjs"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jp-liu/jp-axios.git",
+    "directory": "packages/axios"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "peerDependencies": {
     "axios": "^0.26.1"
   },
