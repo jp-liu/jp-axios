@@ -15,7 +15,6 @@
     "url": "git+ssh://git@github.com/jp-liu/jp-axios.git"
   },
   "sideEffects": false,
-  "main": "index.js",
   "scripts": {
     "dev": "pnpm -C examples dev && pnpm build",
     "build": "rimraf packages/*/dist && pnpm -r --filter !examples run build",
@@ -42,9 +41,9 @@
     "output": "./examples/test"
   },
   "dependencies": {
-    "@jp-axios/api": "workspace:^0.0.4",
-    "@jp-axios/core": "workspace:^0.0.4",
-    "@jp-axios/hook": "workspace:^0.0.4"
+    "@jp-axios/api": "workspace:*",
+    "@jp-axios/core": "workspace:*",
+    "@jp-axios/hook": "workspace:*"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.18.9",
