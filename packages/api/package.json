@@ -28,12 +28,13 @@
   "scripts": {
     "test:--single": "ts-node ./src/test/test-single.ts",
     "test:--multiple": "ts-node ./src/test/test-multiple.ts",
-    "build": "tsup --sourcemap --watch --dts --format esm,cjs"
+    "build": "tsup --sourcemap --watch --dts --format cjs"
   },
   "peerDependencies": {
     "swagger-typescript-api": "^9.3.1"
   },
   "dependencies": {
+    "@jp-liu/axios": "workspace:^0.0.1",
     "make-dir": "^3.1.0",
     "swagger-typescript-api": "^9.3.1"
   }
