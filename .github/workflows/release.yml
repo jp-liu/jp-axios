@@ -10,19 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2.2.1
-
-      - name: Set node version to v16
-        uses: actions/setup-node@v2
+      - uses: actions/setup-node@v1
         with:
-          node-version: 16.x
+          node-version: 14.x
           registry-url: https:registry.npmjs.org/
-          cache: pnpm
-
+      
       - name: Publish
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
-        run: pnpm publish
+        run: npm publish
