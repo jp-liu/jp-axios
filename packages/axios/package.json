@@ -11,15 +11,15 @@
     "request",
     "http"
   ],
+  "scripts": {
+    "test": "vitest",
+    "build": "tsup --sourcemap --dts --format esm,cjs"
+  },
   "license": "MIT",
   "author": "jp-liu <fortune_coder@foxmail.com>",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "scripts": {
-    "test": "vitest",
-    "build": "tsup --sourcemap --watch --dts --format esm,cjs"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jp-liu/jp-axios.git",

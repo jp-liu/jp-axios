@@ -2,6 +2,10 @@
   "name": "@jp-liu/api",
   "version": "0.0.1",
   "description": "A tool that automatically generates and encapsulates Axios according to swagger or OpenAPI",
+  "homepage": "https://github.com/jp-liu/jp-axios/packages/api/#readme",
+  "bugs": {
+    "url": "https://github.com/jp-liu/jp-axios/issues"
+  },
   "keywords": [
     "swagger",
     "swagger-ui",
@@ -26,6 +30,12 @@
   "author": "jp-liu <fortune_coder@foxmail.com>",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jp-liu/jp-axios.git",
+    "directory": "packages/api"
+  },
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -38,6 +48,7 @@
     "./templates"
   ],
   "peerDependencies": {
+    "@jp-liu/axios": "workspace:^0.0.1",
     "swagger-typescript-api": "^9.3.1"
   },
   "dependencies": {

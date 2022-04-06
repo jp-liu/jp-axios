@@ -1,19 +1,42 @@
 {
   "name": "@jp-liu/hook",
   "version": "0.0.1",
-  "description": "",
+  "description": "A method for jp-axios to call with hook function",
+  "homepage": "https://github.com/jp-liu/jp-axios/packages/hook/#readme",
+  "bugs": {
+    "url": "https://github.com/jp-liu/jp-axios/issues"
+  },
   "keywords": [
     "axios",
     "jp-axios",
     "request",
     "http"
   ],
-  "license": "MIT",
-  "author": "jp-liu <fortune_coder@foxmail.com>",
-  "main": "index.js",
   "scripts": {
     "test": "vitest",
-    "build": "tsup --sourcemap --watch --dts --format esm,cjs"
+    "build": "tsup --sourcemap --dts --format esm,cjs"
+  },
+  "license": "MIT",
+  "author": "jp-liu <fortune_coder@foxmail.com>",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jp-liu/jp-axios.git",
+    "directory": "packages/hook"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "@jp-liu/axios": "workspace:^0.0.1"
   },
   "dependencies": {
     "@jp-liu/axios": "workspace:^0.0.1"
