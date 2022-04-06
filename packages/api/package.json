@@ -18,35 +18,36 @@
     "http",
     "request"
   ],
-  "bin": {
-    "jp-api": "./bin/index.js"
-  },
-  "scripts": {
-    "test:--single": "ts-node ./src/test/test-single.ts",
-    "test:--multiple": "ts-node ./src/test/test-multiple.ts",
-    "build": "tsup --sourcemap --dts --format cjs,esm"
-  },
   "license": "MIT",
   "author": "jp-liu <fortune_coder@foxmail.com>",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jp-liu/jp-axios.git",
     "directory": "packages/api"
   },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.js",
       "import": "./dist/index.mjs"
     }
   },
+  "bin": {
+    "jp-api": "./bin/index.js"
+  },
   "files": [
     "./dist",
     "./bin",
     "./templates"
   ],
+  "scripts": {
+    "test:--single": "ts-node ./src/test/test-single.ts",
+    "test:--multiple": "ts-node ./src/test/test-multiple.ts",
+    "build": "tsup --sourcemap --dts --format cjs,esm",
+    "pbs": "npm publish --access public"
+  },
   "peerDependencies": {
     "@jp-axios/core": "workspace:*",
     "swagger-typescript-api": "^9.3.1"

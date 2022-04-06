@@ -11,20 +11,16 @@
     "request",
     "http"
   ],
-  "scripts": {
-    "test": "vitest",
-    "build": "tsup --sourcemap --dts --format esm,cjs"
-  },
   "license": "MIT",
   "author": "jp-liu <fortune_coder@foxmail.com>",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jp-liu/jp-axios.git",
     "directory": "packages/axios"
   },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -34,6 +30,11 @@
   "files": [
     "dist"
   ],
+  "scripts": {
+    "test": "vitest",
+    "build": "tsup --sourcemap --dts --format esm,cjs",
+    "pbs": "npm publish --access public"
+  },
   "peerDependencies": {
     "axios": "^0.26.1"
   },

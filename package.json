@@ -7,17 +7,20 @@
   "bugs": {
     "url": "https://github.com/jp-liu/jp-axios/issues"
   },
+  "description": "<h1 align=\"center\">jp-axios</h1> <p align=\"center\"> <a href=\"https://github.com/jp-liu/jp-axios\" target=\"_blank\"> <img src=\"https://user-images.githubusercontent.com/79979500/161939949-a889f42b-652a-47fe-8ed6-f7c9a4bdb376.png\" alt=\"heimdall-ts\" height=\"136\" width=\"459\"/> </a> </p> <p align=\"center\">  <a href=\"https://github.com/jp-liu/jp-axios\"  target=\"__blank\" style=\"text-decoration: none;\">         <img src=\"https://img.shields.io/badge/%40jp--axios-0.0.1-success\" />     </a>     <a href=\"https://github.com/jp-liu/jp-axios/packages/core\"  target=\"__blank\" style=\"text-decoration: none;\">         <img src=\"https://img.shields.io/badge/%40jp--axios/core-green\" />     </a>  <a href=\"https://github.com/jp-liu/jp-axios/packages/hook\"  target=\"__blank\" style=\"text-decoration: none;\">         <img src=\"https://img.shields.io/badge/%40jp--axios/hook-blueviolet\" />     </a>     <a href=\"https://github.com/jp-liu/jp-axios/packages/api\"  target=\"__blank\" style=\"text-decoration: none;\">         <img src=\"https://img.shields.io/badge/%40jp--axios/api-yellow\" />     </a> </p> <p align=\"center\">  <a href=\"https://github.com/jp-liu/jp-axios\" target=\"__blank\">         <img alt=\"GitHub stars\" src=\"https://img.shields.io/github/stars/jp-liu/jp-axios?style=social\">     </a> </p>",
   "license": "MIT",
   "author": "jp-liu <fortune_coder@foxmail.com>",
   "repository": {
     "type": "git",
-    "url": "git@github.com:jp-liu/jp-axios.git"
+    "url": "git+ssh://git@github.com/jp-liu/jp-axios.git"
   },
   "sideEffects": false,
+  "main": "index.js",
   "scripts": {
     "dev": "pnpm -C examples dev && pnpm build",
     "build": "rimraf packages/*/dist && pnpm -r --filter !examples run build",
     "release": "bumpp package.json packages/*/package.json --commit --push --tag",
+    "pbs": "pnpm -r --filter !examples run pbs && --no-git-checks",
     "lint": "eslint .",
     "test": "vitest",
     "test:api-single": "pnpm -C packages/api test:--single",
@@ -53,5 +56,8 @@
     "tsup": "^5.12.4",
     "typescript": "^4.6.3",
     "vitest": "^0.7.13"
+  },
+  "directories": {
+    "example": "examples"
   }
 }
