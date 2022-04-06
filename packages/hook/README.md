@@ -1,16 +1,12 @@
-##  @jp-axios/hook
+## @jp-axios/hook
 
 **@jp-axios/hook** 是补全和 `axios` 的功能, 让其也可以通过函数调用的方式来调用接口, 提供了多种重载, 支持各种参数提示
-
-
 
 ### 下载
 
 ```bash
 $ npm install @jp-axios/hook -D
 ```
-
-
 
 ### 使用
 
@@ -120,4 +116,4 @@ useHttp.get('/users', {
 })
 ```
 
-### 
+###
