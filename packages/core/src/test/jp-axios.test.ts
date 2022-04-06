@@ -190,7 +190,7 @@ describe('jp-axios', () => {
     })
   }, 10000)
 
-  it.only('remove repeat request for single request', async() => {
+  it('remove repeat request for single request', async() => {
     const instance = new JPAxios()
     let res1, res2, res3
     const req = () =>
