@@ -1,5 +1,5 @@
 {
-  "name": "@jp-liu/monorepo",
+  "name": "@jp-axios/monorepo",
   "version": "0.0.1",
   "private": true,
   "packageManager": "pnpm@6.32.3",
@@ -39,9 +39,9 @@
     "output": "./examples/test"
   },
   "dependencies": {
-    "@jp-liu/api": "workspace:^0.0.1",
-    "@jp-liu/axios": "workspace:^0.0.1",
-    "@jp-liu/hook": "workspace:^0.0.1"
+    "@jp-axios/api": "workspace:^0.0.1",
+    "@jp-axios/core": "workspace:^0.0.1",
+    "@jp-axios/hook": "workspace:^0.0.1"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.18.5",

@@ -1,5 +1,5 @@
 {
-  "name": "@jp-liu/hook",
+  "name": "@jp-axios/hook",
   "version": "0.0.1",
   "description": "A method for jp-axios to call with hook function",
   "homepage": "https://github.com/jp-liu/jp-axios/packages/hook/#readme",
@@ -36,9 +36,9 @@
     "dist"
   ],
   "peerDependencies": {
-    "@jp-liu/axios": "workspace:^0.0.1"
+    "@jp-axios/core": "workspace:^0.0.1"
   },
   "dependencies": {
-    "@jp-liu/axios": "workspace:^0.0.1"
+    "@jp-axios/core": "workspace:^0.0.1"
   }
 }

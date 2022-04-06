@@ -24,7 +24,7 @@ export interface JPRequestConfig<T = JPResponse, K = JPResponse> extends AxiosRe
  * @description 封装拦截器接口
  */
 export interface JPInterceptors<T = JPResponse, K = JPResponse> {
-  requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig
+  requestInterceptor?: (config: JPRequestConfig<T, K>) => JPRequestConfig<T, K>
   requestInterceptorCatch?: (err: any) => any
   responseInterceptor?: (res: T) => K
   responseInterceptorCatch?: (err: any) => any

@@ -1,5 +1,5 @@
 {
-  "name": "@jp-liu/api",
+  "name": "@jp-axios/api",
   "version": "0.0.1",
   "description": "A tool that automatically generates and encapsulates Axios according to swagger or OpenAPI",
   "homepage": "https://github.com/jp-liu/jp-axios/packages/api/#readme",
@@ -48,11 +48,11 @@
     "./templates"
   ],
   "peerDependencies": {
-    "@jp-liu/axios": "workspace:^0.0.1",
+    "@jp-axios/core": "workspace:^0.0.1",
     "swagger-typescript-api": "^9.3.1"
   },
   "dependencies": {
-    "@jp-liu/axios": "workspace:^0.0.1",
+    "@jp-axios/core": "workspace:^0.0.1",
     "make-dir": "^3.1.0",
     "swagger-typescript-api": "^9.3.1"
   }
