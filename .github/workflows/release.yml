@@ -20,10 +20,12 @@ jobs:
           node-version: 16
           registry-url: https://registry.npmjs.org/
           cache: pnpm
-          
-      - name: Publish
+
+      - name: Install dep
         run: pnpm install
+      - name: Build
         run: pnpm build
+      - name: Publish
         run: pnpm pbs
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
