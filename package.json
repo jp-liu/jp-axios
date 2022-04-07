@@ -19,7 +19,7 @@
     "dev": "pnpm -C examples dev && pnpm build",
     "build": "rimraf packages/*/dist && pnpm -r --filter !examples run build",
     "release": "pnpm build && bumpp package.json packages/*/package.json --commit --push --tag && pnpm pbs",
-    "pbs": "pnpm -r --filter !examples run pbs && --no-git-checks",
+    "pbs": "pnpm -r --filter !examples run pbs",
     "lint": "eslint .",
     "test": "vitest",
     "test:api-single": "pnpm -C packages/api test:--single",
