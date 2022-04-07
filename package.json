@@ -1,6 +1,6 @@
 {
   "name": "@jp-axios/monorepo",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "private": true,
   "packageManager": "pnpm@6.32.3",
   "homepage": "https://github.com/jp-liu/jp-axios#readme",
@@ -18,7 +18,7 @@
   "scripts": {
     "dev": "pnpm -C examples dev && pnpm build",
     "build": "rimraf packages/*/dist && pnpm -r --filter !examples run build",
-    "release": "bumpp package.json packages/*/package.json --commit --push --tag",
+    "release": "pnpm build && bumpp package.json packages/*/package.json --commit --push --tag && pnpm pbs",
     "pbs": "pnpm -r --filter !examples run pbs && --no-git-checks",
     "lint": "eslint .",
     "test": "vitest",
