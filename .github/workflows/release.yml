@@ -15,13 +15,14 @@ jobs:
         uses: pnpm/action-setup@v2.2.1
 
       - name: Set node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: 16.x
-          registry-url: https:registry.npmjs.org/
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
           cache: pnpm
-
       - name: Publish
+      - run: pnpm install
+      - run: pnpm build
+      - run: pnpm pbs
         env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-        run: pnpm pbs
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
