@@ -1,6 +1,6 @@
 {
   "name": "@jp-axios/api",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "A tool that automatically generates and encapsulates Axios according to swagger or OpenAPI",
   "homepage": "https://github.com/jp-liu/jp-axios/packages/api/#readme",
   "bugs": {
