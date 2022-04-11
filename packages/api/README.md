@@ -16,6 +16,7 @@ Generated api module [**@jp-axios/core**](https://github.com/jp-liu/jp-axios/tre
 玩得开心 ^_^
 
 
+---
 
 ### Why
 
@@ -53,7 +54,7 @@ $ pnpx jp-api
 {
     "scripts": {
         "jp-api": "jp-api",
-        //...
+        // ...
     }
 }
 ```
@@ -61,9 +62,11 @@ $ pnpx jp-api
 也支持在 `node` 中, 扩展,自行运行
 
 ```ts
-import { generate } from '@jp-liu/api"
+import { generate } from '@jp-liu/api'
 
-const config = { ... }
+const config = {
+  // ...
+}
 generate(config)
 ```
 
@@ -73,11 +76,40 @@ generate(config)
 
 配置我们可以写在 `package.json` 中, 也可以在根目录创建 `jp-api.config.js/json`
 
+```ts
+interface GenerateConfig {
+  /**
+   * swagger 文档地址,可以使`json`或`yaml`,输入绝对路径
+   */
+  input: string | ArrayInputOrOutputModel[]
+  /**
+   * url to swagger schema
+   */
+  url: string | ArrayInputOrOutputModel[]
+  /**
+   * swagger schema JSON
+   */
+  spec: import('swagger-schema-official').Spec
+  /**
+   * 生成输出路径
+   */
+  output: string | ArrayInputOrOutputModel[]
+  /**
+   * 是否覆盖,除`module`文件夹外的其他文件,默认:false
+   * 其他文件都是提供的模板,会存在变更,所以默认不覆盖
+   */
+  overwrite?: boolean
+}
+```
+
 | 字段      | 描述( 入口支持数组形式 )                                     |
 | :-------- | ------------------------------------------------------------ |
 | input     | 直接提供入口文件, 支持 `json` `yaml` 可以让后端生成, 参考入参一 |
 | url       | 后端 `GitHub` 仓库地址, 或者是开启的 `swagger` 网页的接口信息, 参考入参二 |
 | overwrite | 默认值: **false**  <br />是否覆盖基础模板, 由于提供的基础模板是会产生修改的部分, 如果接口更新,需要重新生成, 则由该开关控制是否将通用部分覆盖 |
+| useAxios  | 是否采用 `axios` 模板生成代码                                |
+| splitApi  | 默认值: **false**<br />多入口，是否对应多出口。<br />有时候后端分为多个模块，统一在网关对外暴露调用，前端开发针对后端模块分包，但仅仅只需要一个出口调用 |
+| output    | 代码出口路径。example：`"./src/api"`                         |
 
 > 示例:
 >
@@ -93,12 +125,12 @@ generate(config)
 >         // "input": "./src/api/swagger.json", // or "./src/api/swagger.yaml"
 >         "input": [
 >             {
->                 dirName: "test1",
->                 path: "./src/api/swagger.json"
+>                 "dirName": "test1",
+>                 "path": "./src/api/swagger.json"
 >             },
 >             {
->                 dirName: "test2",
->                 path: "./src/api/swagger.yaml"
+>                 "dirName": "test2",
+>                 "path": "./src/api/swagger.yaml"
 >             }
 >         ],
 >         "output": "./src/api"
@@ -106,16 +138,27 @@ generate(config)
 > }
 > ```
 >
-> 1. `json` 如: [swagger.json](https://github.com/jp-liu/jp-axios/blob/main/src/jp-axios-module/test/swagger.json)
-> 2. `yaml` 如: [swagger.yaml](https://github.com/jp-liu/jp-axios/blob/main/src/jp-axios-module/test/swagger.yaml)
+> 1. `json` 如: [swagger.json](https://github.com/jp-liu/jp-axios/blob/main/packages/api/src/test/swagger.json)
+> 2. `yaml` 如: [swagger.yaml](https://github.com/jp-liu/jp-axios/blob/main/packages/api/src/test/swagger.yaml)
 >
 > 入参二:
->
+> 
 > ```json
-> "jp-api": {
->   // "url": "http://xxx:8080/xxx-server/v2/api-docs" // or 'git'
->   "url": ["http://xxx:8080/xxx-server/v2/api-docs", "http://xxx:8081/xxx-server/v2/api-docs"],
->   "output": "./src/api"
+> {
+>    "jp-api": {
+>       // "url": "http://xxx:8080/xxx-server/v2/api-docs" // or 'git'
+>       "url": [
+>           {
+>               "dirName": "test1",
+>               "path": "http://xxx:8080/xxx-server/v2/api-docs",
+>           },
+>           {
+>               "dirName": "test2",
+>               "path": "http://xxx:8080/xxx-server/v2/api-docs1",
+>           },
+>       ],
+>       "output": "./src/api"
+>    }
 > }
 > ```
 >

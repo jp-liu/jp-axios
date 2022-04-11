@@ -18,8 +18,20 @@ export interface GenerateConfig {
   /**
    * 是否覆盖,除`module`文件夹外的其他文件,默认:false
    * 其他文件都是提供的模板,会存在变更,所以默认不覆盖
+   * @default false
    */
   overwrite?: boolean
+  /**
+   * 是否采用 `axios` 模板生成代码
+   * @default false
+   */
+  useAxios?: boolean
+  /**
+   * 是否拆包: 后端分为多个模块，统一在网关对外暴露调用，前端开发针对后端模块分包，但仅仅只需要一个出口调用
+   * @tips 每一个入口是否生成一个模块 `useModule`
+   * @default false
+   */
+  splitApi?: boolean
 }
 
 export interface GenerateContext extends GenerateConfig {
@@ -52,10 +64,9 @@ export interface GenerateContext extends GenerateConfig {
    */
   isArrayOutput: boolean
   /**
-   * 是否覆盖,除`module`文件夹外的其他文件,默认:false
-   * 其他文件都是提供的模板,会存在变更,所以默认不覆盖
+   * 运行环境
    */
-  overwrite?: boolean
+  dev: 'debug' | 'package' | 'npm'
 }
 
 /**
