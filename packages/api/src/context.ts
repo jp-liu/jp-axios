@@ -3,8 +3,16 @@ import type { ArrayInputOrOutputModel, EntryType, GenerateConfig, GenerateContex
 
 const cwd = process.cwd()
 export function createGenerateContext(config: GenerateConfig, entryType: EntryType): GenerateContext {
+  // 1./Users/xxx/project/jp-axios/packages/api  => 调试断点
+  // 2./Users/xxx/project/jp-axios               => 开发调试
+  // 3./Users/xxx/project                        => 被`npm`调用(TODO: `template` 寻址)
+  const isDebug = cwd.includes('/packages/api')
+  const isDev = cwd.includes('/jp-axios')
+  const env = isDebug ? 'debug' : isDev ? 'dev' : 'npm'
+
   const context: GenerateContext = {
     rootPath: cwd,
+    env,
     modulePath: '',
     entryType,
     config,
@@ -67,13 +75,14 @@ function handleModulePath(context: GenerateContext) {
 }
 
 function handleTemplatePath(context: GenerateContext) {
-  const isDebug = cwd.includes('/packages/api')
-  const isNodeModules = !cwd.includes('/jp-axios') && isDebug
-  context.templatePath = isDebug
-    ? './templates/eta'
-    : !isNodeModules
-      ? './packages/api/templates/eta'
-      : './node_modules/@jpliu/api/templates/eta'
+  const { env } = context
+  const paths = {
+    debug: './templates/eta',
+    dev: './packages/api/templates/eta',
+    npm: './node_modules/@jpliu/api/templates/eta' // TODO: 寻址,全局安装,或者`monorepo`
+  }
+
+  context.templatePath = paths[env]
 }
 
 function arrayInputOrOutput(inputOrOutput: string | ArrayInputOrOutputModel[]) {

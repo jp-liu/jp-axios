@@ -66,7 +66,7 @@ export interface GenerateContext extends GenerateConfig {
   /**
    * 运行环境
    */
-  dev: 'debug' | 'package' | 'npm'
+  env: 'dev' | 'debug' | 'npm'
 }
 
 /**
