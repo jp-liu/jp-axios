@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-import { pathIsExist } from './utils'
+import { extend, pathIsExist } from './utils'
 import type { GenerateConfig } from './types'
 const cwd = process.cwd()
 
@@ -7,6 +7,15 @@ const cwd = process.cwd()
  * @description 获取配置信息
  */
 export function getGenerateModuleConfig(): GenerateConfig {
+  const defaultConfig: GenerateConfig = {
+    input: '',
+    output: '',
+    spec: {} as any,
+    url: '',
+    useAxios: false,
+    splitApi: false,
+    overwrite: false
+  }
   // 1.获取包信息中的配置信息
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const pkg = require(resolve(cwd, './package.json'))
@@ -30,5 +39,5 @@ export function getGenerateModuleConfig(): GenerateConfig {
     // no configuration
     throw new Error('No configuration information detected')
 
-  return config
+  return extend(defaultConfig, config)
 }
