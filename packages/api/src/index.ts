@@ -12,7 +12,7 @@ export function generate(config?: GenerateConfig) {
 }
 
 // 任务清单, 保持现有逻辑不变
-// 0.`context`增加一个状态判定,是什么环境下使用, `jp-axios` | `jp-api` | 'node_modules`
-// 1.增加 `useAxios` 模板
-// 2.增加 `splitApi` 功能
-// 3.使用 `axios` 模板的时候,添加一个 `unwrapResponse` 功能
+// [x] 0.`context`增加一个状态判定,是什么环境下使用
+// [] 1.增加 `useAxios` 模板
+// [] 2.增加 `splitApi` 功能
+// [] 3.使用 `axios` 模板的时候,添加一个 `unwrapResponse` 功能
