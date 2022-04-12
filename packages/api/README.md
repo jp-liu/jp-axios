@@ -164,3 +164,17 @@ interface GenerateConfig {
 >
 > `url`: `http://xxx:8080/xxx-server/v2/api-docs?`是后端同事开的 `swagger` 文档地址请求的 `api` 内容,如
 > ![image](https://user-images.githubusercontent.com/79979500/161214860-4a593702-92fd-4325-837c-44aca2321a62.png)
+
+
+
+## 任务清单
+
+- [x] 0.`context`增加一个状态判定,是什么环境下使用,这样可以确定模板路径
+- [ ] 1.增加 `useAxios` 模板
+  - [ ] 1.1 happy path 原有基础不变,增加一个 `useAxios` 判定
+  - [ ] 1.2 进行重构,相同的部分抽取为 `base`,不同部分分为 `jp-axios` 和 `axios`
+  - [ ] 1.3 `axios` 导出部分是否 `unwrapResponse` 解包,既 `res => res.data`
+- [ ] 2.增加 `splitApi` 功能
+  - [ ] 2.1 开启 `splitApi` 将多入口对应多出口,和现在差不多
+  - [ ] 2.2 关闭 `splitApi` 将多入口对应单出口,导出一个实例,适用于一套工程,多个后端服务
+    - [ ] 2.2.1 使用方式: useModule('dirName/methods', params, config) 就是将之前的拆分模块,变为了一个入口一个模块
