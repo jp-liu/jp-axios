@@ -1,6 +1,6 @@
 {
   "name": "@jp-axios/api",
-  "version": "0.0.19",
+  "version": "0.0.22",
   "description": "A tool that automatically generates and encapsulates Axios according to swagger or OpenAPI",
   "homepage": "https://github.com/jp-liu/jp-axios/packages/api/#readme",
   "bugs": {
@@ -47,7 +47,7 @@
     "test:--single": "ts-node ./src/test/test-single.ts",
     "test:--multiple": "ts-node ./src/test/test-multiple.ts",
     "build": "tsup --sourcemap --dts --format cjs,esm",
-    "pbs": "pnpm publish --no-git-checks"
+    "pbs": "pnpm build && pnpm publish --no-git-checks"
   },
   "peerDependencies": {
     "swagger-typescript-api": "^9.3.1"
