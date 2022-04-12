@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 import type { JPRequestConfig, JPResponse } from '@jp-axios/core'
 
 import { handlerError } from '../error/error'
@@ -13,7 +12,7 @@ export function requestInterceptor(config: JPRequestConfig): JPRequestConfig {
 }
 
 /**
- * @description 请求发送失败拦截器
+ * @description 请求发送失败拦截器(取消请求)
  */
 export function requestInterceptorCatch(err: any): any {
   return err

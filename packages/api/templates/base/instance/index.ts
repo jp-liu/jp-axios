@@ -1,5 +1,5 @@
-import JPAxios from '@jp-liu/axios'
-import type { JPRequestConfig, JPResponse } from '@jp-liu/axios'
+import JPAxios from '@jp-axios/core'
+import type { JPRequestConfig, JPResponse } from '@jp-axios/core'
 import {
   requestInterceptor,
   requestInterceptorCatch,
@@ -9,6 +9,7 @@ import {
 
 /**
  * @description 导出实例
+ * 可以提供你自己的 `config`
  */
 export const instance = new JPAxios()
 
