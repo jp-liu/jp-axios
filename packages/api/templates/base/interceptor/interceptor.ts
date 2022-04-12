@@ -1,6 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-import type { JPRequestConfig, JPResponse } from 'jp-axios'
+import type { JPRequestConfig, JPResponse } from '@jp-axios/core'
 
 import { handlerError } from '../error/error'
 
