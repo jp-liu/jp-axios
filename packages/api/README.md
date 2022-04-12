@@ -170,7 +170,7 @@ interface GenerateConfig {
 ## 任务清单
 
 - [x] 0.`context`增加一个状态判定,是什么环境下使用,这样可以确定模板路径
-- [ ] 1.增加 `useAxios` 模板
+- [x] 1.增加 `useAxios` 模板
   - [ ] 1.1 happy path 原有基础不变,增加一个 `useAxios` 判定
   - [ ] 1.2 进行重构,相同的部分抽取为 `base`,不同部分分为 `jp-axios` 和 `axios`
   - [ ] 1.3 `axios` 导出部分是否 `unwrapResponse` 解包,既 `res => res.data`
