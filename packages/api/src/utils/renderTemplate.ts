@@ -1,17 +1,24 @@
 import path, { resolve } from 'path'
-import type { Env } from '../types'
+import type { GenerateContext } from '../types'
 import { cleanDir, copyFile, createDir, pathIsDir, pathIsExist, readDir } from './files'
 
 /**
  * @description 准备生成通用模板
  */
-export function renderBaseTemplate(outputPath: string, overwrite: boolean, env: Env): void {
-  let basePath = '../templates/base'
+export function renderBaseTemplate(outputPath: string, context: GenerateContext): void {
+  const { overwrite, env, useAxios } = context
+
+  let basePath = '../templates'
   if (env !== 'npm') basePath = `../${basePath}`
-  console.log(basePath)
-  const baseFilePath = resolve(__dirname, basePath)
-  console.log(baseFilePath)
-  baseTemplate(baseFilePath, outputPath, overwrite)
+  let baseFilePath = resolve(__dirname, basePath)
+  if (useAxios)
+    // 1.axios
+    baseFilePath = resolve(__dirname, `${basePath}/axios`)
+  else
+    // 2.jp-axios
+    baseFilePath = resolve(__dirname, `${basePath}/base`)
+
+  baseTemplate(baseFilePath, outputPath, overwrite!)
 }
 /**
  * @description 生成通用请求模板

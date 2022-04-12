@@ -15,7 +15,6 @@ export function generateModule(config: any): void {
   const context = createGenerateContext(config, entryType)
 
   // 多入口
-  const overwrite = context.overwrite!
   if (context.isArrayInput) {
     const entryPaths = context[entryType] as ArrayInputOrOutputModel[]
     const outputPaths = context.output as ArrayInputOrOutputModel[]
@@ -24,18 +23,18 @@ export function generateModule(config: any): void {
       const entry = entryPaths[i]
       const output = outputPaths.find(out => out.dirName === entry.dirName)!.path
       const module = modulePaths.find(mod => mod.dirName === entry.dirName)!.path
-      renderBaseTemplate(output, overwrite, context.env)
+      renderBaseTemplate(output, context)
       generateModuleApi(entry.path, module, output, context.templatePath, entryType)
     }
     return
   }
 
   // 单入口
-  renderBaseTemplate(context.output as string, overwrite, context.env)
+  renderBaseTemplate(context.output as string, context)
   generateModuleApi(context[entryType] as string, context.modulePath as string, context.output as string, context.templatePath, entryType)
 }
 
-function generateModuleApi<T extends EntryType>(entryPath: string, modulePath: string, output: string, templates: string, entryType: T) {
+function generateModuleApi(entryPath: string, modulePath: string, output: string, templates: string, entryType: EntryType) {
   generateApi({
     modular: true,
     [entryType as 'input']: entryPath,

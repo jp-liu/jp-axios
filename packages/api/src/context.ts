@@ -1,5 +1,6 @@
 import { resolve } from 'path'
 import type { ArrayInputOrOutputModel, EntryType, GenerateConfig, GenerateContext } from './types'
+import { isWin } from './utils'
 
 const cwd = process.cwd()
 export function createGenerateContext(config: GenerateConfig, entryType: EntryType): GenerateContext {
@@ -7,7 +8,7 @@ export function createGenerateContext(config: GenerateConfig, entryType: EntryTy
     rootPath: cwd,
     env: 'dev',
     config,
-    isWin: /^win/.test(process.platform),
+    isWin: isWin(),
     entryType,
     modulePath: '',
     templatePath: '',
