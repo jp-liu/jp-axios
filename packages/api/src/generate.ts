@@ -24,14 +24,14 @@ export function generateModule(config: any): void {
       const entry = entryPaths[i]
       const output = outputPaths.find(out => out.dirName === entry.dirName)!.path
       const module = modulePaths.find(mod => mod.dirName === entry.dirName)!.path
-      renderBaseTemplate(output, overwrite)
+      renderBaseTemplate(output, overwrite, context.env)
       generateModuleApi(entry.path, module, output, context.templatePath, entryType)
     }
     return
   }
 
   // 单入口
-  renderBaseTemplate(context.output as string, overwrite)
+  renderBaseTemplate(context.output as string, overwrite, context.env)
   generateModuleApi(context[entryType] as string, context.modulePath as string, context.output as string, context.templatePath, entryType)
 }
 
