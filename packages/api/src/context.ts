@@ -3,25 +3,19 @@ import type { ArrayInputOrOutputModel, EntryType, GenerateConfig, GenerateContex
 
 const cwd = process.cwd()
 export function createGenerateContext(config: GenerateConfig, entryType: EntryType): GenerateContext {
-  // 1./Users/xxx/project/jp-axios/packages/api  => 调试断点
-  // 2./Users/xxx/project/jp-axios               => 开发调试
-  // 3./Users/xxx/project                        => 被`npm`调用(TODO: `template` 寻址)
-  const isDebug = cwd.includes('/packages/api')
-  const isDev = cwd.includes('/jp-axios')
-  const env = isDebug ? 'debug' : isDev ? 'dev' : 'npm'
-
   const context: GenerateContext = {
     rootPath: cwd,
-    env,
-    modulePath: '',
-    entryType,
+    env: 'dev',
     config,
+    isWin: /^win/.test(process.platform),
+    entryType,
+    modulePath: '',
     templatePath: '',
     isArrayInput: Array.isArray(config.input) || Array.isArray(config.url),
     isArrayOutput: Array.isArray(config.output),
     ...config
   }
-
+  handleEnv(context)
   handleEntry(context)
   handleOutput(context)
   handleModulePath(context)
@@ -90,4 +84,16 @@ function arrayInputOrOutput(inputOrOutput: string | ArrayInputOrOutputModel[]) {
     return inputOrOutput.map(p => ({ dirName: p.dirName, path: p.path.includes(cwd) ? p.path : resolve(cwd, `./${p.path}`) }))
   else
     return resolve(cwd, inputOrOutput)
+}
+
+function handleEnv(context: GenerateContext) {
+  const { isWin } = context
+  const debugPath = isWin ? '\\packages\\api' : '/packages/api'
+  const devPath = isWin ? '\\jp-axios' : '/jp-axios'
+  // 1./Users/xxx/project/jp-axios/packages/api  => 调试断点
+  // 2./Users/xxx/project/jp-axios               => 开发调试
+  // 3./Users/xxx/project                        => 被`npm`调用(TODO: `template` 寻址)
+  const isDebug = cwd.includes(debugPath)
+  const isDev = cwd.includes(devPath)
+  context.env = isDebug ? 'debug' : isDev ? 'dev' : 'npm'
 }

@@ -66,7 +66,11 @@ export interface GenerateContext extends GenerateConfig {
   /**
    * 运行环境
    */
-  env: 'dev' | 'debug' | 'npm'
+  env: Env
+  /**
+   * 是否`window`系统,路径存在问题`\`
+   */
+  isWin: boolean
 }
 
 /**
@@ -87,3 +91,8 @@ export interface ArrayInputOrOutputModel {
  * @description 入口类型
  */
 export type EntryType = 'input' | 'url' | 'spec'
+
+/**
+ * @description 执行环境
+ */
+export type Env = 'dev' | 'debug' | 'npm'

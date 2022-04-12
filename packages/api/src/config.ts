@@ -25,16 +25,16 @@ export function getGenerateModuleConfig(): GenerateConfig {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const jsConfigPath = resolve(cwd, './jp-api.config.js')
   const jsonConfigPath = resolve(cwd, './jp-api.config.json')
-  let configfile
+  let configFile
   if (pathIsExist(jsConfigPath))
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-    configfile = require(jsConfigPath)
+    configFile = require(jsConfigPath)
   else if (pathIsExist(jsonConfigPath))
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-    configfile = require(jsonConfigPath)
+    configFile = require(jsonConfigPath)
 
   // 3.判断配置信息
-  const config = configfile || pkgConfig || null
+  const config = configFile || pkgConfig || null
   if (!config)
     // no configuration
     throw new Error('No configuration information detected')
