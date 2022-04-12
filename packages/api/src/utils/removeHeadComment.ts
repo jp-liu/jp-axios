@@ -1,5 +1,6 @@
 import path from 'path'
 import { getFileContent, pathIsDir, readDir, writeFile } from './files'
+import { isWin } from '.'
 
 /**
  * @description 去掉文件头部的双斜杠注释
@@ -8,7 +9,8 @@ import { getFileContent, pathIsDir, readDir, writeFile } from './files'
 export function removeHeadComment(src: string, isModule = false) {
   if (!src) return
   try {
-    const flag = src.split('\\').pop() === 'module'
+    const separator = isWin() ? '\\' : '/'
+    const flag = src.split(separator).pop() === 'module'
     if (pathIsDir(src)) {
       const files = readDir(src)
       files.forEach((filename) => {
