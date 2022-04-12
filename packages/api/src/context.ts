@@ -73,7 +73,7 @@ function handleTemplatePath(context: GenerateContext) {
   const paths = {
     debug: './templates/eta',
     dev: './packages/api/templates/eta',
-    npm: './node_modules/@jpliu/api/templates/eta' // TODO: 寻址,全局安装,或者`monorepo`
+    npm: './node_modules/@jp-axios/api/templates/eta' // TODO: 寻址,全局安装,或者`monorepo`
   }
 
   context.templatePath = paths[env]
