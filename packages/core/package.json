@@ -33,7 +33,7 @@
   "scripts": {
     "test": "vitest",
     "build": "tsup --sourcemap --dts --format esm,cjs",
-    "pbs": "npm publish --access public"
+    "pbs": "pnpm publish --no-git-checks"
   },
   "peerDependencies": {
     "axios": "^0.26.1"

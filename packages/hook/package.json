@@ -1,6 +1,6 @@
 {
   "name": "@jp-axios/hook",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "A method for jp-axios to call with hook function",
   "homepage": "https://github.com/jp-liu/jp-axios/packages/hook/#readme",
   "bugs": {
@@ -34,7 +34,7 @@
   "scripts": {
     "test": "vitest",
     "build": "tsup --sourcemap --dts --format esm,cjs",
-    "pbs": "npm publish --access public"
+    "pbs": "pnpm publish --no-git-checks"
   },
   "peerDependencies": {
     "@jp-axios/core": "workspace:*"
