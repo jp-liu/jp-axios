@@ -45,7 +45,7 @@ function generateModuleApi(entryPath: string, modulePath: string, output: string
   }).then(() => {
     // 1.多出口需要拷贝多份
     // 1.去除头部注释
-    removeHeadComment(output)
+    removeHeadComment(modulePath)
     // 2.重命名`api`文件,使其更具语义化
     renameApiFile(output)
   })

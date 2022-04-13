@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import modules, { useModule } from './module/http-client'
 export { instance } from './instance'
 
