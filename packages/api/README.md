@@ -164,7 +164,8 @@ interface GenerateConfig {
 - [x] 1.增加 `useAxios` 模板
   - [x] 1.1 happy path 原有基础不变,增加一个 `useAxios` 判定
   - [x] 1.2 进行重构,相同的部分抽取为 `base`,不同部分分为 `jp-axios` 和 `axios`
-  - [ ] 1.3 `axios` 导出部分是否 `unwrapResponse` 解包,既 `res => res.data`
+  - [ ] 1.3 `module` 的模板需要支持 `axios`
+  - [ ] 1.4 `axios` 导出部分是否 `unwrapResponse` 解包,既 `res => res.data`
 - [ ] 2.增加 `splitApi` 功能
   - [ ] 2.1 开启 `splitApi` 将多入口对应多出口,和现在差不多
   - [ ] 2.2 关闭 `splitApi` 将多入口对应单出口,导出一个实例,适用于一套工程,多个后端服务
