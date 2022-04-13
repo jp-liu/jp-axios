@@ -2,7 +2,7 @@ import { generateApi } from 'swagger-typescript-api'
 import { createGenerateContext } from './context'
 import { getEntryType, removeHeadComment, renameApiFile, renderBaseTemplate } from './utils'
 
-import type { ArrayInputOrOutputModel, EntryType, GenerateConfig } from './types'
+import type { ArrayInputOrOutputModel, GenerateConfig, GenerateContext } from './types'
 
 export function generateModule(config: Omit<GenerateConfig, 'input' | 'url'>): void
 export function generateModule(config: Omit<GenerateConfig, 'input' | 'spec'>): void
@@ -24,24 +24,26 @@ export function generateModule(config: any): void {
       const output = outputPaths.find(out => out.dirName === entry.dirName)!.path
       const module = modulePaths.find(mod => mod.dirName === entry.dirName)!.path
       renderBaseTemplate(output, context)
-      generateModuleApi(entry.path, module, output, context.templatePath, entryType)
+      generateModuleApi(entry.path, module, output, context)
     }
     return
   }
 
   // 单入口
   renderBaseTemplate(context.output as string, context)
-  generateModuleApi(context[entryType] as string, context.modulePath as string, context.output as string, context.templatePath, entryType)
+  generateModuleApi(context[entryType] as string, context.modulePath as string, context.output as string, context)
 }
 
-function generateModuleApi(entryPath: string, modulePath: string, output: string, templates: string, entryType: EntryType) {
+function generateModuleApi(entryPath: string, modulePath: string, output: string, context: GenerateContext) {
+  const { templatePath, entryType, useAxios } = context
   generateApi({
     modular: true,
     [entryType as 'input']: entryPath,
     output: modulePath,
     extractRequestParams: true,
     // because this script was called from package.json folder
-    templates,
+    templates: templatePath,
+    httpClientType: useAxios ? 'axios' : 'fetch'
   }).then(() => {
     // 1.多出口需要拷贝多份
     // 1.去除头部注释
