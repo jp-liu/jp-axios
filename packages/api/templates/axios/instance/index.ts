@@ -24,6 +24,5 @@ instance.interceptors.response.use(responseInterceptor, responseInterceptorCatch
  */
 export function request<T>(config: AxiosRequestConfig) {
   // you can do something before request
-  // .then(res => res.data) 是否解包
-  return instance.request<T>(config)
+  return instance.request<T>(config).then(res => res.data)
 }

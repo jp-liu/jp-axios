@@ -27,6 +27,11 @@ export interface GenerateConfig {
    */
   useAxios?: boolean
   /**
+   * `axios` 输出结果是否是 `res.data`
+   * @default true
+   */
+  unwrapResponse?: boolean
+  /**
    * 是否拆包: 后端分为多个模块，统一在网关对外暴露调用，前端开发针对后端模块分包，但仅仅只需要一个出口调用
    * @tips 每一个入口是否生成一个模块 `useModule`
    * @default false

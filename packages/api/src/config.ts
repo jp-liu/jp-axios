@@ -13,6 +13,7 @@ export function getGenerateModuleConfig(): GenerateConfig {
     spec: {} as any,
     url: '',
     useAxios: false,
+    unwrapResponse: true,
     splitApi: false,
     overwrite: false
   }

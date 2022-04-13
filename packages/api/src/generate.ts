@@ -1,6 +1,6 @@
 import { generateApi } from 'swagger-typescript-api'
 import { createGenerateContext } from './context'
-import { getEntryType, removeHeadComment, renameApiFile, renderBaseTemplate } from './utils'
+import { getEntryType, removeHeadComment, renameApiFile, renderBaseTemplate, wrapResponse } from './utils'
 
 import type { ArrayInputOrOutputModel, GenerateConfig, GenerateContext } from './types'
 
@@ -35,7 +35,7 @@ export function generateModule(config: any): void {
 }
 
 function generateModuleApi(entryPath: string, modulePath: string, output: string, context: GenerateContext) {
-  const { templatePath, entryType, useAxios } = context
+  const { templatePath, entryType, useAxios, unwrapResponse } = context
   generateApi({
     modular: true,
     [entryType as 'input']: entryPath,
@@ -50,5 +50,7 @@ function generateModuleApi(entryPath: string, modulePath: string, output: string
     removeHeadComment(modulePath)
     // 2.重命名`api`文件,使其更具语义化
     renameApiFile(output)
+    // 3.`unwrapResponse`
+    !unwrapResponse && wrapResponse(context)
   })
 }

@@ -90,8 +90,25 @@ interface GenerateConfig {
   /**
    * 是否覆盖,除`module`文件夹外的其他文件,默认:false
    * 其他文件都是提供的模板,会存在变更,所以默认不覆盖
+   * @default false
    */
   overwrite?: boolean
+  /**
+   * 是否采用 `axios` 模板生成代码
+   * @default false
+   */
+  useAxios?: boolean
+  /**
+   * `axios` 输出结果是否是 `res.data`
+   * @default true
+   */
+  unwrapResponse?: boolean
+  /**
+   * 是否拆包: 后端分为多个模块，统一在网关对外暴露调用，前端开发针对后端模块分包，但仅仅只需要一个出口调用
+   * @tips 每一个入口是否生成一个模块 `useModule`
+   * @default false
+   */
+  splitApi?: boolean
 }
 ```
 
@@ -101,6 +118,7 @@ interface GenerateConfig {
 | url       | 后端 `GitHub` 仓库地址, 或者是开启的 `swagger` 网页的接口信息, 参考入参二 |
 | overwrite | 默认值: **false**  <br />是否覆盖基础模板, 由于提供的基础模板是会产生修改的部分, 如果接口更新,需要重新生成, 则由该开关控制是否将通用部分覆盖 |
 | useAxios  | 是否采用 `axios` 模板生成代码                                |
+| unwrapResponse  | 是否将 `axios` 响应值解包, `res => res.data`                                |
 | splitApi  | 默认值: **false**<br />多入口，是否对应多出口。<br />有时候后端分为多个模块，统一在网关对外暴露调用，前端开发针对后端模块分包，但仅仅只需要一个出口调用 |
 | output    | 代码出口路径。example：`"./src/api"`                         |
 
@@ -164,8 +182,8 @@ interface GenerateConfig {
 - [x] 1.增加 `useAxios` 模板
   - [x] 1.1 happy path 原有基础不变,增加一个 `useAxios` 判定
   - [x] 1.2 进行重构,相同的部分抽取为 `base`,不同部分分为 `jp-axios` 和 `axios`
-  - [ ] 1.3 `module` 的模板需要支持 `axios`
-  - [ ] 1.4 `axios` 导出部分是否 `unwrapResponse` 解包,既 `res => res.data`
+  - [x] 1.3 `module` 的模板需要支持 `axios`
+  - [x] 1.4 `axios` 导出部分是否 `unwrapResponse` 解包,既 `res => res.data`
 - [ ] 2.增加 `splitApi` 功能
   - [ ] 2.1 开启 `splitApi` 将多入口对应多出口,和现在差不多
   - [ ] 2.2 关闭 `splitApi` 将多入口对应单出口,导出一个实例,适用于一套工程,多个后端服务
