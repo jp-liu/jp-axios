@@ -11,12 +11,15 @@ export function renderBaseTemplate(outputPath: string, context: GenerateContext)
   let basePath = '../templates'
   if (env !== 'npm') basePath = `../${basePath}`
   let baseFilePath = resolve(__dirname, basePath)
+  // common template
+  baseTemplate(resolve(__dirname, `${basePath}/base`), outputPath, overwrite!)
+
   if (useAxios)
     // 1.axios
     baseFilePath = resolve(__dirname, `${basePath}/axios`)
   else
     // 2.jp-axios
-    baseFilePath = resolve(__dirname, `${basePath}/base`)
+    baseFilePath = resolve(__dirname, `${basePath}/jp-axios`)
 
   baseTemplate(baseFilePath, outputPath, overwrite!)
 }

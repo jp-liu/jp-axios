@@ -1,4 +1,4 @@
-## @jp-axios/api
+# @jp-axios/api
 
 **@jp-axios/api** 是一个根据提供的配置, 自动生成 `API` 模块的工具.
 
@@ -15,18 +15,15 @@ Generated api module [**@jp-axios/core**](https://github.com/jp-liu/jp-axios/tre
 
 玩得开心 ^_^
 
-
 ---
 
-### Why
+## Why
 
 ![generate](https://user-images.githubusercontent.com/79979500/161927613-3a0cc0f6-d67b-40c9-882f-63e0f330f76e.jpg)
 
 ![jp-api](https://user-images.githubusercontent.com/79979500/161933386-04ad663e-843f-4ea5-a187-734890705195.gif)
 
-
-
-### 安装
+## 安装
 
 ```bash
 $ npm install @jp-liu/api --save-dev
@@ -36,9 +33,7 @@ $ pnpm install @jp-liu/api --save-dev
 $ yarn add @jp-liu/api --save-dev
 ```
 
-
-
-### 如何使用
+## 如何使用
 
 如果你没有全局安装, 那么可以使用 `npx` 或者 `pnpx` 工具辅助执行
 
@@ -70,9 +65,7 @@ const config = {
 generate(config)
 ```
 
-
-
-### 配置信息
+## 配置信息
 
 配置我们可以写在 `package.json` 中, 也可以在根目录创建 `jp-api.config.js/json`
 
@@ -142,7 +135,7 @@ interface GenerateConfig {
 > 2. `yaml` 如: [swagger.yaml](https://github.com/jp-liu/jp-axios/blob/main/packages/api/src/test/swagger.yaml)
 >
 > 入参二:
-> 
+>
 > ```json
 > {
 >    "jp-api": {
@@ -165,14 +158,12 @@ interface GenerateConfig {
 > `url`: `http://xxx:8080/xxx-server/v2/api-docs?`是后端同事开的 `swagger` 文档地址请求的 `api` 内容,如
 > ![image](https://user-images.githubusercontent.com/79979500/161214860-4a593702-92fd-4325-837c-44aca2321a62.png)
 
-
-
 ## 任务清单
 
 - [x] 0.`context`增加一个状态判定,是什么环境下使用,这样可以确定模板路径
 - [x] 1.增加 `useAxios` 模板
-  - [ ] 1.1 happy path 原有基础不变,增加一个 `useAxios` 判定
-  - [ ] 1.2 进行重构,相同的部分抽取为 `base`,不同部分分为 `jp-axios` 和 `axios`
+  - [x] 1.1 happy path 原有基础不变,增加一个 `useAxios` 判定
+  - [x] 1.2 进行重构,相同的部分抽取为 `base`,不同部分分为 `jp-axios` 和 `axios`
   - [ ] 1.3 `axios` 导出部分是否 `unwrapResponse` 解包,既 `res => res.data`
 - [ ] 2.增加 `splitApi` 功能
   - [ ] 2.1 开启 `splitApi` 将多入口对应多出口,和现在差不多
