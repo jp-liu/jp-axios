@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import JPAxios from '..'
+import type { JPResponse } from '../../dist'
 
 const delay = () => {
   return new Promise<void>((resolve) => {
@@ -12,7 +13,7 @@ const delay = () => {
 describe('jp-axios', () => {
   it('happy path, use jp-axios', async() => {
     const instance = new JPAxios()
-    const res = await instance.get({ url: 'http://localhost:3000/user/info' })
+    const res = await instance.get<JPResponse<{ name: string; age: number; height: number }>>({ url: 'http://localhost:3000/user/info' })
     expect(res.data).toMatchObject({
       name: '小明',
       age: 18,
