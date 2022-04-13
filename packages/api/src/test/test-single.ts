@@ -4,4 +4,5 @@ import { generateModule } from '../generate'
 const input = path.resolve(__dirname, './swagger.json')
 const output = path.resolve(__dirname, './module')
 
-generateModule({ input, output, useAxios: true })
+generateModule({ input, output, useAxios: false })
+// generateModule({ input, output, useAxios: true })

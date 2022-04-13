@@ -3,7 +3,7 @@ import { getFileContent, pathIsDir, readDir, writeFile } from './files'
 import { isWin } from '.'
 
 /**
- * @description 去掉文件头部的双斜杠注释
+ * @description 去掉文件头部的注释
  * @param src 文件路径
  */
 export function removeHeadComment(src: string, isModule = false) {
