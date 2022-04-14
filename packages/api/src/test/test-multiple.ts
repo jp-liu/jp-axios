@@ -15,5 +15,6 @@ generateModule({
       path: input
     }
   ],
-  output
+  output,
+  splitApi: true
 })

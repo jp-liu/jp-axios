@@ -104,9 +104,9 @@ interface GenerateConfig {
    */
   unwrapResponse?: boolean
   /**
-   * 是否拆包: 后端分为多个模块，统一在网关对外暴露调用，前端开发针对后端模块分包，但仅仅只需要一个出口调用
+   * 多入口是否拆包: 后端分为多个模块，统一在网关对外暴露调用，前端开发针对后端模块分包，但仅仅只需要一个出口调用
    * @tips 每一个入口是否生成一个模块 `useModule`
-   * @default false
+   * @default true
    */
   splitApi?: boolean
 }
@@ -184,7 +184,11 @@ interface GenerateConfig {
   - [x] 1.2 进行重构,相同的部分抽取为 `base`,不同部分分为 `jp-axios` 和 `axios`
   - [x] 1.3 `module` 的模板需要支持 `axios`
   - [x] 1.4 `axios` 导出部分是否 `unwrapResponse` 解包,既 `res => res.data`
-- [ ] 2.增加 `splitApi` 功能
-  - [ ] 2.1 开启 `splitApi` 将多入口对应多出口,和现在差不多
-  - [ ] 2.2 关闭 `splitApi` 将多入口对应单出口,导出一个实例,适用于一套工程,多个后端服务
-    - [ ] 2.2.1 使用方式: useModule('dirName/methods', params, config) 就是将之前的拆分模块,变为了一个入口一个模块
+- [x] 2.增加 `splitApi` 功能
+  - [x] 2.1 单入口为是否按模块导出,
+    - [x] 2.1.1 `true` 按模块导出
+    - [x] 2.1.1 `false` 不按模块,生成单文件
+  - [ ] 2.2 多入口为是否只生成一个实例调用
+    - [x] `true` 拆包,一个入口一个实例,一个文件夹
+    - [ ] `false` 不拆包,多个入口,一个出口,一个实例,每个入口都是一个单文件
+  - [ ] 不拆包生成文件名,也就是 `dirName`,单入口的时候,就是 `schema`
