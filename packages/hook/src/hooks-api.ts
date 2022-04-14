@@ -1,4 +1,3 @@
-
 import JPAxios from '@jp-axios/core'
 import type { AxiosDefaults, AxiosInstance } from 'axios'
 import type { Interceptor, JPInterceptors, JPRequestConfig, JPResponse } from '@jp-axios/core'
