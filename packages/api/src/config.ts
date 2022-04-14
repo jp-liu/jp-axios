@@ -6,7 +6,7 @@ const cwd = process.cwd()
 /**
  * @description 获取配置信息
  */
-export function getGenerateModuleConfig(): GenerateConfig {
+export function getGenerateModuleConfig(con: GenerateConfig): GenerateConfig {
   const defaultConfig: GenerateConfig = {
     input: '',
     output: '',
@@ -14,9 +14,12 @@ export function getGenerateModuleConfig(): GenerateConfig {
     url: '',
     useAxios: false,
     unwrapResponse: true,
-    splitApi: false,
+    splitApi: true,
     overwrite: false
   }
+  if (con)
+    return extend(defaultConfig, con)
+
   // 1.获取包信息中的配置信息
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const pkg = require(resolve(cwd, './package.json'))
