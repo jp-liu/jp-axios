@@ -1,6 +1,6 @@
 import { generateApi } from 'swagger-typescript-api'
 import { createGenerateContext } from './context'
-import { getEntryType, removeHeadComment, renameApiFile, renderBaseTemplate, wrapResponse } from './utils'
+import { createApiEntry, getEntryType, removeHeadComment, renameApiFile, renderBaseTemplate, wrapResponse } from './utils'
 
 import type { ArrayInputOrOutputModel, GenerateConfig, GenerateContext } from './types'
 
@@ -14,7 +14,7 @@ export function generateModule(config: any): void {
   const entryType = getEntryType(config)
   const context = createGenerateContext(config, entryType)
 
-  // 多入口
+  // 多入口 TODO 最多可同步执行任务数量
   if (context.isArrayInput) {
     const entryPaths = context[entryType] as ArrayInputOrOutputModel[]
     const outputPaths = context.output as ArrayInputOrOutputModel[]
@@ -35,9 +35,10 @@ export function generateModule(config: any): void {
 }
 
 function generateModuleApi(entryPath: string, modulePath: string, output: string, context: GenerateContext) {
-  const { templatePath, entryType, useAxios, unwrapResponse } = context
+  const { templatePath, entryType, useAxios, splitApi } = context
+
   generateApi({
-    modular: true,
+    modular: splitApi,
     [entryType as 'input']: entryPath,
     output: modulePath,
     extractRequestParams: true,
@@ -45,12 +46,13 @@ function generateModuleApi(entryPath: string, modulePath: string, output: string
     templates: templatePath,
     httpClientType: useAxios ? 'axios' : 'fetch'
   }).then(() => {
-    // 1.多出口需要拷贝多份
     // 1.去除头部注释
     removeHeadComment(modulePath)
     // 2.重命名`api`文件,使其更具语义化
     renameApiFile(output)
     // 3.`unwrapResponse`
-    !unwrapResponse && wrapResponse(context)
+    wrapResponse(context)
+    // 4.`splitApi`多仓库导出一个实例
+    createApiEntry(context)
   })
 }
