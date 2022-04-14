@@ -26,7 +26,8 @@ const descriptionLines = _.compact([
 
 %>
 
-<% if (config.httpClientType === config.constants.HTTP_CLIENT.AXIOS) { %> import { AxiosRequestConfig, AxiosResponse } from "axios"; <% } %>
+import { request } from "../instance";
+import type { RequestConfig } from './http-client';
 
 export default {
 <% routes.outOfModule && routes.outOfModule.forEach((route) => { %>

@@ -4,6 +4,4 @@ const { config } = it;
 
 <% if (config.modular) { %>
     <%~ includeFile('./http-modular.eta', it) %>
-<% } else { %>
-    <%~ includeFile('./http-default.eta', it) %>
 <% } %>
