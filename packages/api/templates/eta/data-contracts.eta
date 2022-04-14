@@ -23,8 +23,4 @@
 */
 <% } %>
 export <%~ (dataContractTemplates[contract.typeIdentifier] || dataContractTemplates.type)(contract) %>
-
-
 <% }) %>
-
-/* CUSTOM TEMPLATE */
