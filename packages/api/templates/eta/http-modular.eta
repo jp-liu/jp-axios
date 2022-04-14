@@ -1,0 +1,65 @@
+<%
+const { routes, utils, config } = it;
+const { classNameCase } = utils;
+%>
+
+<% routes.outOfModule && routes.outOfModule.forEach((route) => { %>
+import <%~ route.moduleName %> from './<%~ classNameCase(route.moduleName) %>';
+<% }) %>
+<% if (config.httpClientType === 'axios') { %>
+import type { AxiosRequestConfig, AxiosResponse } from "axios";
+<% } else { %>
+import type { JPRequestConfig, JPResponse } from "@jp-axios/core";
+<% } %>
+
+import type { Get, GetParams, ObjectKeyPaths } from '../types/utils';
+
+<% routes.combined && routes.combined.forEach(({ routes = [], moduleName }) => { %>
+import <%~ moduleName %> from './<%~ classNameCase(moduleName) %>';
+<% }) %>
+
+export const modules = {
+    <% routes.outOfModule && routes.outOfModule.forEach((route) => { %>
+    <%~ route.moduleName %>,
+    <% }) %>
+    <% routes.combined && routes.combined.forEach(({ routes = [], moduleName }) => { %>
+    <%~ moduleName %>,
+    <% }) %>
+};
+
+type Modules = typeof modules
+type ModuleKeys = keyof Modules
+type AllModulePath = ObjectKeyPaths<Modules>
+type ModuleFnPath = Exclude<AllModulePath, ModuleKeys>
+type RequestFn<T extends ModuleFnPath> = Get<Modules, T>
+<% if (config.httpClientType === 'axios') { %>
+export type RequestConfig = Omit<AxiosRequestConfig, 'url' | 'method' | 'data' | 'params'>
+<% } else { %>
+export type RequestConfig<T = JPResponse> = Omit<JPRequestConfig<T, T>, 'url' | 'method' | 'data' | 'params'>
+<% } %>
+type RequestParams<T extends ModuleFnPath> = Get<Modules, T> extends Function ? GetParams<Get<Modules, T>>[0] : never
+
+export function useModule<T extends ModuleFnPath>(
+  module: T, 
+  moduleParams: RequestParams<T> | null,
+<% if (config.httpClientType === 'axios') { %>
+  config?: RequestConfig
+<% } else { %>
+  config?: RequestConfig<ReturnType<RequestFn<T>>>
+<% } %>
+): ReturnType<RequestFn<T>> {
+  type Module<K> = K extends `${infer A}/${infer B}` ? A extends ModuleKeys ? Module<B> : never : K extends ModuleKeys ? Modules[K] : never
+  const modulePath = module.split('/')
+  if (modulePath.length === 1)
+    throw new Error('请输入正确的方法路径')
+
+  const moduleName = modulePath[0] as ModuleKeys
+  const moduleFnName = modulePath[1] as Module<T>
+  const moduleFnParams = moduleParams || {}
+  const moduleFnConfig = config || {}
+
+  const request = modules[moduleName][moduleFnName] as RequestFn<T>
+  return request(moduleFnParams as any, moduleFnConfig as any) as ReturnType<RequestFn<T>>
+}
+
+export default modules
