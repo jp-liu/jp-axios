@@ -1,0 +1,19 @@
+<%
+const { utils, route, config, modelTypes } = it;
+const { _, classNameCase, require } = utils;
+const apiClassName = classNameCase(route.moduleName);
+const routes = route.routes;
+const dataContracts = _.map(modelTypes, "name");
+%>
+
+import { request } from "../instance";
+import type { RequestConfig } from './http-client';
+<% if (dataContracts.length) { %>
+import { <%~ dataContracts.join(", ") %> } from "../types/interface";
+<% } %>
+
+export default {
+    <% routes.forEach((route) => { %>
+        <%~ includeFile('./procedure-call-modular.eta', { ...it, route }) %>
+    <% }) %>
+}
