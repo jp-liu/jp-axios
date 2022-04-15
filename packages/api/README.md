@@ -99,7 +99,7 @@ interface GenerateConfig {
    */
   useAxios?: boolean
   /**
-   * `axios` 输出结果是否是 `res.data`
+   * `axios` 输出结果是否是 `res.data`,仅在 `useAxios` 为 `true` 时有效
    * @default true
    */
   unwrapResponse?: boolean
@@ -188,7 +188,7 @@ interface GenerateConfig {
   - [x] 2.1 单入口为是否按模块导出,
     - [x] 2.1.1 `true` 按模块导出
     - [x] 2.1.1 `false` 不按模块,生成单文件
-  - [ ] 2.2 多入口为是否只生成一个实例调用
+  - [x] 2.2 多入口为是否只生成一个实例调用
     - [x] `true` 拆包,一个入口一个实例,一个文件夹
-    - [ ] `false` 不拆包,多个入口,一个出口,一个实例,每个入口都是一个单文件
-  - [ ] 不拆包生成文件名,也就是 `dirName`,单入口的时候,就是 `schema`
+    - [x] `false` 不拆包,多个入口,一个出口,一个实例,每个入口都是一个单文件
+  - [x] 不拆包生成文件名,也就是 `dirName`,单入口的时候,就是 `schema`

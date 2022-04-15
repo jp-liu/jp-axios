@@ -110,4 +110,5 @@ export type Env = 'dev' | 'debug' | 'npm'
 export interface GenerateOutput extends GenerateApiOutput {
   output: string
   modulePath: string
+  splitApi: boolean
 }

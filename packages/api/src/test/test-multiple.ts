@@ -16,7 +16,7 @@ generateModule({
     }
   ],
   output,
-  splitApi: true,
+  splitApi: false,
   useAxios: true,
   unwrapResponse: false
 })
