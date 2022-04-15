@@ -1,3 +1,5 @@
+import type { GenerateApiOutput } from 'swagger-typescript-api'
+
 export interface GenerateConfig {
   /**
    * swagger 文档地址,可以使`json`或`yaml`,输入绝对路径
@@ -101,3 +103,11 @@ export type EntryType = 'input' | 'url' | 'spec'
  * @description 执行环境
  */
 export type Env = 'dev' | 'debug' | 'npm'
+
+/**
+ * @description 生成出口的对应信息
+ */
+export interface GenerateOutput extends GenerateApiOutput {
+  output: string
+  modulePath: string
+}

@@ -2,7 +2,7 @@ import { generateApi } from 'swagger-typescript-api'
 import { createGenerateContext } from './context'
 import { createApiEntry, getEntryType, removeHeadComment, renameApiFile, renderBaseTemplate, wrapResponse } from './utils'
 
-import type { ArrayInputOrOutputModel, GenerateConfig, GenerateContext } from './types'
+import type { ArrayInputOrOutputModel, GenerateConfig, GenerateContext, GenerateOutput } from './types'
 
 export function generateModule(config: Omit<GenerateConfig, 'input' | 'url'>): void
 export function generateModule(config: Omit<GenerateConfig, 'input' | 'spec'>): void
@@ -14,6 +14,9 @@ export function generateModule(config: any): void {
   const entryType = getEntryType(config)
   const context = createGenerateContext(config, entryType)
 
+  const { splitApi } = context
+  const result: Promise<GenerateOutput>[] = []
+
   // 多入口 TODO 最多可同步执行任务数量
   if (context.isArrayInput) {
     const entryPaths = context[entryType] as ArrayInputOrOutputModel[]
@@ -21,23 +24,59 @@ export function generateModule(config: any): void {
     const modulePaths = context.modulePath as ArrayInputOrOutputModel[]
     for (let i = 0; i < entryPaths.length; i++) {
       const entry = entryPaths[i]
-      const output = outputPaths.find(out => out.dirName === entry.dirName)!.path
-      const module = modulePaths.find(mod => mod.dirName === entry.dirName)!.path
-      renderBaseTemplate(output, context)
-      generateModuleApi(entry.path, module, output, context)
+      let output, module
+      if (splitApi) {
+        output = outputPaths.find(out => out.dirName === entry.dirName)!.path
+        module = modulePaths.find(mod => mod.dirName === entry.dirName)!.path
+      }
+      else {
+        output = context.output as string
+        module = context.modulePath as string
+      }
+      context.splitApi && renderBaseTemplate(output, context)
+      result.push(generateModuleApi(entry.path, module, output, entry.dirName, context))
     }
-    return
+    // 多入口不拆包,则只需要一份出口
+    !context.splitApi && renderBaseTemplate(output, context)
+  }
+  else {
+    // 单入口
+    renderBaseTemplate(context.output as string, context)
+    result.push(generateModuleApi(
+      context[entryType] as string,
+      context.modulePath as string,
+      context.output as string,
+      'schema', context
+    ))
   }
 
-  // 单入口
-  renderBaseTemplate(context.output as string, context)
-  generateModuleApi(context[entryType] as string, context.modulePath as string, context.output as string, context)
+  Promise.all(result).then((outInfo) => {
+    if (splitApi) {
+      outInfo.forEach((item) => {
+        // 1.去除头部注释
+        removeHeadComment(item.modulePath)
+        // 2.重命名`api`文件,使其更具语义化
+        renameApiFile(item.output, context)
+        // 3.`unwrapResponse`
+        wrapResponse(item.output, context)
+      })
+    }
+    else {
+      // 1.去除头部注释
+      removeHeadComment(outInfo[0].modulePath)
+      // 2.`unwrapResponse`
+      wrapResponse(outInfo[0].output, context)
+      // 3.`splitApi`多仓库导出一个实例
+      createApiEntry(context)
+    }
+  })
 }
 
-function generateModuleApi(entryPath: string, modulePath: string, output: string, context: GenerateContext) {
+function generateModuleApi(entryPath: string, modulePath: string, output: string, filename: string, context: GenerateContext) {
   const { templatePath, entryType, useAxios, splitApi } = context
 
-  generateApi({
+  return generateApi({
+    name: filename,
     modular: splitApi,
     [entryType as 'input']: entryPath,
     output: modulePath,
@@ -45,14 +84,7 @@ function generateModuleApi(entryPath: string, modulePath: string, output: string
     // because this script was called from package.json folder
     templates: templatePath,
     httpClientType: useAxios ? 'axios' : 'fetch'
-  }).then(() => {
-    // 1.去除头部注释
-    removeHeadComment(modulePath)
-    // 2.重命名`api`文件,使其更具语义化
-    renameApiFile(output)
-    // 3.`unwrapResponse`
-    wrapResponse(context)
-    // 4.`splitApi`多仓库导出一个实例
-    createApiEntry(context)
+  }).then((res) => {
+    return { ...res, modulePath, output }
   })
 }
