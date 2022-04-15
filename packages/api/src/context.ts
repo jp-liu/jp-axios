@@ -35,7 +35,7 @@ function handleEntry(context: GenerateContext) {
 }
 
 function handleOutput(context: GenerateContext) {
-  const { isArrayInput, input, output } = context
+  const { isArrayInput, input, output, splitApi } = context
   let out = arrayInputOrOutput(output)
   const isArr = Array.isArray(out)
   if (isArr && !isArrayInput)
@@ -53,17 +53,19 @@ function handleOutput(context: GenerateContext) {
    *     + instance
    *     + ...
    */
-  if (isArrayInput && !Array.isArray(out)) {
-    out = (input as ArrayInputOrOutputModel[]).map(p => ({ dirName: p.dirName, path: resolve(out as string, `./${p.dirName}`) }))
-    context.isArrayOutput = true
+  if (splitApi) {
+    if (isArrayInput && !Array.isArray(out)) {
+      out = (input as ArrayInputOrOutputModel[]).map(p => ({ dirName: p.dirName, path: resolve(out as string, `./${p.dirName}`) }))
+      context.isArrayOutput = true
+    }
   }
 
   context.output = out
 }
 
 function handleModulePath(context: GenerateContext) {
-  const { output, isArrayOutput } = context
-  if (isArrayOutput)
+  const { output, isArrayOutput, splitApi } = context
+  if (splitApi && isArrayOutput)
     context.modulePath = (output as ArrayInputOrOutputModel[]).map(p => ({ dirName: p.dirName, path: resolve(p.path, './module') }))
   else
     context.modulePath = resolve(output as string, './module')
