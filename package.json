@@ -16,7 +16,7 @@
   },
   "sideEffects": false,
   "scripts": {
-    "dev": "pnpm -C examples dev && pnpm build",
+    "dev": "pnpm -C packages/api build && jp-api && pnpm -C examples dev",
     "build": "rimraf packages/*/dist && pnpm -r --filter !examples run build",
     "release": "pnpm build && bumpp package.json packages/*/package.json --commit --push --tag && pnpm pbs",
     "pbs": "pnpm -r --filter !examples run pbs",
@@ -35,7 +35,7 @@
       },
       {
         "dirName": "test2",
-        "path": "./packages/api/src/test/swagger.json"
+        "path": "./packages/api/src/test/swagger.yaml"
       }
     ],
     "output": "./examples/test"
