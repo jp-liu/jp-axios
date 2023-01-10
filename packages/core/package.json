@@ -1,6 +1,6 @@
 {
   "name": "@jp-axios/core",
-  "version": "0.0.16",
+  "version": "0.1.1",
   "description": "**@jp-axios/core** 是 `axios` 的封装.增加了接口拦截器和去除重复请求的功能, 我们可以在这里获得更多代码提示, 良好的开发体验",
   "homepage": "https://github.com/jp-liu/jp-axios/packages/axios/#readme",
   "bugs": {
