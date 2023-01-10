@@ -1,11 +1,11 @@
 import type { AxiosResponse } from 'axios'
-import type { JPRequestConfig } from '@jp-liu/jp-axios'
-import { useHttp as httpClient } from '../../src'
-import type { UseHttp } from '../../src/hook-api/hooks-api'
+import type { JPRequestConfig } from '@jp-axios/core'
+import { useHttp as httpClient } from '@jp-axios/hook'
+import type { UseHttp } from '@jp-axios/hook'
 
 import user from './module/user'
 import goods from './module/goods'
-export { useHttp } from '../../src'
+export { useHttp } from '@jp-axios/hook'
 
 const modules = {
   user,
@@ -14,7 +14,7 @@ const modules = {
 
 type Get<T, K> = K extends `${infer A}/${infer B}` ? A extends keyof T ? Get<T[A], B> : never : K extends keyof T ? T[K] : never
 
-type GenNode<K extends string | number, IsRoot extends boolean> = IsRoot extends true ? `${K}`: `/${K}` | (K extends number ? `[${K}]` | `/[${K}]` : never)
+type GenNode<K extends string | number, IsRoot extends boolean> = IsRoot extends true ? `${K}` : `/${K}` | (K extends number ? `[${K}]` | `/[${K}]` : never)
 
 type GetParams<T extends Function> = T extends (...args: infer A) => any ? A : never
 
@@ -23,9 +23,9 @@ type ObjectKeyPaths<
   IsRoot extends boolean = true,
   K extends keyof T = keyof T
 > =
-K extends string | number ?
-  GenNode<K, IsRoot> | (T[K] extends object ? `${GenNode<K, IsRoot>}${ObjectKeyPaths<T[K], false>}` : never)
-  :never
+  K extends string | number ?
+    GenNode<K, IsRoot> | (T[K] extends object ? `${GenNode<K, IsRoot>}${ObjectKeyPaths<T[K], false>}` : never)
+    : never
 
 type Modules = typeof modules
 type ModuleKeys = keyof Modules
@@ -35,13 +35,18 @@ type ModuleFnPath = Exclude<AllModulePath, ModuleKeys>
 type RequestFn<T extends ModuleFnPath> = Get<Modules, T>
 export type RequestConfig<T = AxiosResponse> = Omit<JPRequestConfig<T, T>, 'url' | 'method' | 'data' | 'params'>
 type RequestParams<T extends ModuleFnPath> = Get<Modules, T> extends Function ? GetParams<Get<Modules, T>>[0] : never
+type PromiseGenerics<T> = T extends Promise<infer P> ? P : T
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface UseHttpForModule extends UseHttp {
   <T extends ModuleFnPath>(module: T, moduleParams: RequestParams<T> | null, config: RequestConfig<ReturnType<RequestFn<T>>>): ReturnType<RequestFn<T>>
 }
 
-function useHttp<T extends ModuleFnPath>(module: T, moduleParams: RequestParams<T> | null, config: RequestConfig<ReturnType<RequestFn<T>>>): ReturnType<RequestFn<T>> {
+function useRequest<T extends ModuleFnPath>(
+  module: T,
+  moduleParams: RequestParams<T> | null,
+  config?: RequestConfig<PromiseGenerics<ReturnType<RequestFn<T>>>>
+): ReturnType<RequestFn<T>> {
   type Module<K> = K extends `${infer A}/${infer B}` ? A extends ModuleKeys ? Module<B> : never : K extends ModuleKeys ? Modules[K] : never
   const modulePath = module.split('/')
   if (modulePath.length === 1)
@@ -54,19 +59,19 @@ function useHttp<T extends ModuleFnPath>(module: T, moduleParams: RequestParams<
   return requestRequest(moduleParams as any, config as any) as ReturnType<RequestFn<T>>
 }
 
-useHttp.instance = httpClient.instance
-useHttp.defaults = httpClient.instance.defaults
-useHttp.request = httpClient.request
-useHttp.get = httpClient.get
-useHttp.post = httpClient.post
-useHttp.put = httpClient.put
-useHttp.delete = httpClient.delete
-useHttp.head = httpClient.head
-useHttp.patch = httpClient.patch
-useHttp.options = httpClient.options
-useHttp.use = httpClient.use
+useRequest.instance = httpClient.instance
+useRequest.defaults = httpClient.instance.defaults
+useRequest.request = httpClient.request
+useRequest.get = httpClient.get
+useRequest.post = httpClient.post
+useRequest.put = httpClient.put
+useRequest.delete = httpClient.delete
+useRequest.head = httpClient.head
+useRequest.patch = httpClient.patch
+useRequest.options = httpClient.options
+useRequest.use = httpClient.use
 
-useHttp('goods/getGoodsName', { id: '123', name: '小明', price: 123 }, {
+useRequest('goods/getGoodsName', { id: '123', name: '小明', price: 123 }, {
   interceptors: {
     requestInterceptor(config) {
       return config

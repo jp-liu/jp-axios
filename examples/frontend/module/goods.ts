@@ -1,4 +1,4 @@
-import type { JPRequestConfig } from '@jp-liu/axios'
+import type { JPRequestConfig } from '@jp-axios/core'
 import { request } from '../service'
 import type { GoodsInfo } from '../types/goods'
 

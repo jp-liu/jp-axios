@@ -1,5 +1,5 @@
 // import type { AxiosRequestConfig } from 'axios'
-import JPAxios from '@jp-liu/axios'
+import JPAxios from '@jp-axios/core'
 
 export const instance = new JPAxios<{ code: number; data: any; message: string }>({
   interceptors: {
