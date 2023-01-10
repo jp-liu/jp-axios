@@ -1,7 +1,7 @@
 <%
   const { modelTypes, utils } = it;
   const { formatDescription } = utils;
-  
+
 
   const dataContractTemplates = {
     enum: (contract) => {
@@ -22,5 +22,7 @@
 
 */
 <% } %>
+
 export <%~ (dataContractTemplates[contract.typeIdentifier] || dataContractTemplates.type)(contract) %>
+
 <% }) %>

@@ -15,7 +15,7 @@ const isFetchTemplate = config.httpClientType === HTTP_CLIENT.FETCH;
 const requestConfigParam = {
     name: specificArgNameResolver.resolve(RESERVED_REQ_PARAMS_ARG_NAMES),
     optional: true,
-    type: "RequestConfig",
+    type: `RequestConfig<${type}>`,
     defaultValue: "{}",
 }
 
@@ -86,7 +86,7 @@ const securityTmpl = security ? 'true' : null;
 <%~ routeDocs.description %>
 
  * <% /* Here you can add some other JSDoc tags */ %>
- 
+
 <%~ routeDocs.lines %>
 
  */

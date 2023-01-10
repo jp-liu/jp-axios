@@ -1,6 +1,7 @@
 import path from 'path'
-import { generate } from '../index'
+import { generate } from '..'
 
+// const input = path.resolve(__dirname, './swagger.yaml')
 const input = path.resolve(__dirname, './swagger.json')
 const output = path.resolve(__dirname, './module')
 

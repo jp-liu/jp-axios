@@ -6,21 +6,19 @@ const cwd = process.cwd()
 export function createGenerateContext(config: GenerateConfig, entryType: EntryType): GenerateContext {
   const context: GenerateContext = {
     rootPath: cwd,
-    env: 'dev',
     config,
     isWin: isWin(),
     entryType,
     modulePath: '',
-    templatePath: '',
+    templatesPath: resolve(__dirname, '../templates'),
+    etaPath: resolve(__dirname, '../templates/eta'),
     isArrayInput: Array.isArray(config.input) || Array.isArray(config.url),
     isArrayOutput: Array.isArray(config.output),
     ...config
   }
-  handleEnv(context)
   handleEntry(context)
   handleOutput(context)
   handleModulePath(context)
-  handleTemplatePath(context)
 
   return context
 }
@@ -71,32 +69,9 @@ function handleModulePath(context: GenerateContext) {
     context.modulePath = resolve(output as string, './module')
 }
 
-function handleTemplatePath(context: GenerateContext) {
-  const { env } = context
-  const paths = {
-    debug: './templates/eta',
-    dev: './packages/api/templates/eta',
-    npm: './node_modules/@jp-axios/api/templates/eta' // TODO: 寻址,全局安装,或者`monorepo`
-  }
-
-  context.templatePath = paths[env]
-}
-
 function arrayInputOrOutput(inputOrOutput: string | ArrayInputOrOutputModel[]) {
   if (Array.isArray(inputOrOutput))
     return inputOrOutput.map(p => ({ dirName: p.dirName, path: p.path.includes(cwd) ? p.path : resolve(cwd, `./${p.path}`) }))
   else
     return resolve(cwd, inputOrOutput)
-}
-
-function handleEnv(context: GenerateContext) {
-  const { isWin } = context
-  const debugPath = isWin ? '\\packages\\api' : '/packages/api'
-  const devPath = isWin ? '\\jp-axios' : '/jp-axios'
-  // 1./Users/xxx/project/jp-axios/packages/api  => 调试断点
-  // 2./Users/xxx/project/jp-axios               => 开发调试
-  // 3./Users/xxx/project                        => 被`npm`调用(TODO: `template` 寻址)
-  const isDebug = cwd.includes(debugPath)
-  const isDev = cwd.includes(devPath)
-  context.env = isDebug ? 'debug' : isDev ? 'dev' : 'npm'
 }

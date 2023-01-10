@@ -24,7 +24,7 @@ export interface GenerateConfig {
    */
   overwrite?: boolean
   /**
-   * 是否采用 `axios` 模板生成代码
+   * 是否采用 `axios` 模板生成代码, 否则为 `jp-axios`
    * @default false
    */
   useAxios?: boolean
@@ -51,9 +51,13 @@ export interface GenerateContext extends GenerateConfig {
    */
   config: GenerateConfig
   /**
-   * `eta`模板地址
+   * 模板文件夹地址
    */
-  templatePath: string
+  templatesPath: string
+  /**
+   * 模板 `eta` 地址
+   */
+  etaPath: string
   /**
    * 生成输出路径
     */
@@ -70,10 +74,6 @@ export interface GenerateContext extends GenerateConfig {
    * 出口是否是数组类型
    */
   isArrayOutput: boolean
-  /**
-   * 运行环境
-   */
-  env: Env
   /**
    * 是否`window`系统,路径存在问题`\`
    */

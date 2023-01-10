@@ -6,20 +6,18 @@ import { cleanDir, copyFile, createDir, pathIsDir, pathIsExist, readDir } from '
  * @description 准备生成通用模板
  */
 export function renderBaseTemplate(outputPath: string, context: GenerateContext): void {
-  const { overwrite, env, useAxios } = context
+  const { overwrite, useAxios, templatesPath } = context
 
-  let basePath = '../templates'
-  if (env !== 'npm') basePath = `../${basePath}`
-  let baseFilePath = resolve(__dirname, basePath)
   // common template
-  baseTemplate(resolve(__dirname, `${basePath}/base`), outputPath, overwrite!)
+  baseTemplate(resolve(`${templatesPath}/base`), outputPath, overwrite!)
 
+  let baseFilePath: string
   if (useAxios)
     // 1.axios
-    baseFilePath = resolve(__dirname, `${basePath}/axios`)
+    baseFilePath = resolve(__dirname, `${templatesPath}/axios`)
   else
     // 2.jp-axios
-    baseFilePath = resolve(__dirname, `${basePath}/jp-axios`)
+    baseFilePath = resolve(__dirname, `${templatesPath}/jp-axios`)
 
   baseTemplate(baseFilePath, outputPath, overwrite!)
 }

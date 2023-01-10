@@ -57,7 +57,7 @@ export function generateModule(config: any): void {
 }
 
 function generateModuleApi(entryPath: string, modulePath: string, output: string, filename: string, context: GenerateContext) {
-  const { templatePath, entryType, useAxios, splitApi } = context
+  const { etaPath, entryType, useAxios, splitApi } = context
 
   return generateApi({
     name: filename,
@@ -66,8 +66,9 @@ function generateModuleApi(entryPath: string, modulePath: string, output: string
     output: modulePath,
     extractRequestParams: true,
     // because this script was called from package.json folder
-    templates: templatePath,
-    httpClientType: useAxios ? 'axios' : 'fetch'
+    templates: etaPath,
+    httpClientType: useAxios ? 'axios' : 'fetch',
+
   }).then((res) => {
     return { ...res, modulePath, output, splitApi }
   })

@@ -27,7 +27,7 @@ export function getGenerateModuleConfig(con: GenerateConfig): GenerateConfig {
 
   // 2.判断是否提供特定配置信息
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const jsConfigPath = resolve(cwd, './jp-api.config.js')
+  const jsConfigPath = resolve(cwd, './jp-api.config.js') || resolve(cwd, './jp-api.config.ts')
   const jsonConfigPath = resolve(cwd, './jp-api.config.json')
   let configFile
   if (pathIsExist(jsConfigPath))
