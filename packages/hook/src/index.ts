@@ -1,4 +1,4 @@
 import { useHttp } from './hooks-api'
 
-export { useHttp }
+export * from './hooks-api'
 export default useHttp
